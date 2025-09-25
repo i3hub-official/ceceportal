@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
-import { JWTUtils, TokenPayload } from "@/lib/utils/jwt";
+import { JWTUtils } from "@/lib/utils/jwt";
 import { protectData, unprotectData } from "@/lib/security/dataProtection";
 import { verifyHash } from "@/lib/security/encryption";
 import { nanoid } from "nanoid";
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     // Determine if login is email or phone
     const isEmail = login.includes("@");
     const loginType = isEmail ? "email" : "phone";
-    
+
     // Normalize login based on type
     const normalizedLogin = isEmail ? login.trim().toLowerCase() : login.trim();
 
@@ -96,7 +96,10 @@ export async function POST(request: NextRequest) {
 
       if (!primaryAdmin) {
         return NextResponse.json(
-          { success: false, message: "No admin user associated with this school" },
+          {
+            success: false,
+            message: "No admin user associated with this school",
+          },
           { status: 401 }
         );
       }
@@ -178,13 +181,13 @@ export async function POST(request: NextRequest) {
 
     // Get decrypted email for token
     const userEmail = await unprotectData(user.email, "email");
-    
+
     // Get school information
     let centerNumber = "";
     if (user.schoolId) {
       const school = await prisma.school.findUnique({
         where: { id: user.schoolId },
-        select: { centerNumber: true }
+        select: { centerNumber: true },
       });
       centerNumber = school?.centerNumber || "";
     }
@@ -242,7 +245,9 @@ export async function POST(request: NextRequest) {
           adminUserId: user.id,
           schoolId: user.schoolId,
           action: "LOGIN",
-          ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown",
+          ipAddress:
+            request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+            "unknown",
           userAgent: request.headers.get("user-agent") || "unknown",
         },
       });
@@ -251,7 +256,9 @@ export async function POST(request: NextRequest) {
         data: {
           adminUserId: user.id,
           action: "LOGIN",
-            ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown",
+          ipAddress:
+            request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+            "unknown",
           userAgent: request.headers.get("user-agent") || "unknown",
         },
       });

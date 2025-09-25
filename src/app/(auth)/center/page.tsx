@@ -18,12 +18,9 @@ import {
   Search,
   ClipboardList,
   Loader2,
-  Building,
-  Shield,
+    Shield,
   AlertCircle,
-  UserCheck,
-  X,
-  CreditCard,
+    CreditCard,
 } from "lucide-react";
 
 interface CenterResponse {
@@ -56,12 +53,6 @@ interface NINLookupResponse {
   };
   message: string;
   error?: string;
-}
-
-interface EmailVerificationResponse {
-  success: boolean;
-  message: string;
-  verificationSent?: boolean;
 }
 
 export default function SchoolRegistrationPage() {

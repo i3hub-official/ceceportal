@@ -27,30 +27,6 @@ const AUDIT_ACTIONS = {
   SECURITY_ALERT: "SECURITY_ALERT",
 } as const;
 
-interface NINLookupResponse {
-  success: boolean;
-  data?: {
-    exists: boolean;
-    adminId?: string;
-    name?: string;
-    email?: string;
-    phone?: string;
-    verified?: boolean;
-    schoolsManaged?: number;
-    isPrincipal?: boolean;
-    principalOf?: string | null;
-    isActive?: boolean;
-    role?: string;
-    allSchoolsVerified?: boolean;
-    activityStats?: {
-      auditLogs: number;
-      candidatesCreated: number;
-    };
-    readonly?: boolean; // New field to indicate if admin info should be readonly
-  };
-  message: string;
-  error?: string;
-}
 
 // Rate limiting middleware
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {

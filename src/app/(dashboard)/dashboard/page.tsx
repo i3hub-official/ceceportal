@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useTheme } from "@/app/(dashboard)/(component)/context/ThemeContext";
+import React, { useEffect } from "react";
 import { useLoading } from "@/app/(dashboard)/(component)/context/LoadingContext";
 import { useNavigation } from "@/app/(dashboard)/(component)/context/NavigationContext";
 import Sidebar from "@/app/(dashboard)/(component)/layout/Sidebar"; // Fixed import path

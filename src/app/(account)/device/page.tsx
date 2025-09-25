@@ -5,8 +5,7 @@ import {
   Copy,
   Check,
   RefreshCw,
-  Smartphone,
-  Cpu,
+    Cpu,
   Globe,
   Monitor,
   Fingerprint,
@@ -15,8 +14,7 @@ import {
   Touchpad,
   Shield,
   Home,
-  ArrowLeft,
-  Wifi,
+    Wifi,
 } from "lucide-react";
 import Link from "next/link";
 
