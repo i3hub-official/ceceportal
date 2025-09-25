@@ -1,7 +1,4 @@
 import {
-  Link2,
-  Link2OffIcon,
-  LucideLink2,
   ToolCase,
   Printer,
   Send,

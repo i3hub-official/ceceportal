@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Search,
   Filter,
@@ -14,16 +14,14 @@ import {
   Phone,
   Mail,
   FileText,
-  Image as ImageIcon,
-  ChevronDown,
+   ChevronDown,
   X,
   CheckCircle,
   AlertCircle,
   Clock,
   SortAsc,
   SortDesc,
-  MoreHorizontal,
-} from "lucide-react";
+  } from "lucide-react";
 
 // Mock candidate data
 type Candidate = {

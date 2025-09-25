@@ -585,7 +585,6 @@ export default function ForgotPasswordPage() {
     handleTokenChange,
     handleSendToken,
     verifyTokenLogic,
-    handleVerifyToken,
     handleResetPassword,
     resendToken,
     formatTime,

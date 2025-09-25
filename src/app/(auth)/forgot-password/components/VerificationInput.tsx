@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function VerificationInput({
   length = 6,
   value,
   onChange,
   verified = false,
-  error = false, // 🔴 new prop for shake animation
+  error = false, 
 }: {
   length?: number;
   value: string;

@@ -17,10 +17,7 @@ import {
   TooltipProps,
 } from "recharts";
 import {
-  BarChart3,
   TrendingUp,
-  Calendar,
-  Filter,
   Download,
 } from "lucide-react";
 
