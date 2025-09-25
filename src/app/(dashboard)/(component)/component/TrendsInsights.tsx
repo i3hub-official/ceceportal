@@ -52,8 +52,8 @@ export default function TrendsInsights() {
   const [activeTab, setActiveTab] = useState("registrations");
 
   type RegistrationData = (typeof mockData)[number];
-  const CustomTooltip = (props: TooltipProps<string, string>) => {
-    const { active, payload } = props as TooltipProps<string, string> & {
+  const CustomTooltip = (props: TooltipProps) => {
+    const { active, payload } = props as TooltipProps & {
       payload: { payload: RegistrationData }[];
     };
     if (active && payload && payload.length) {
@@ -205,16 +205,16 @@ export default function TrendsInsights() {
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  className="stroke-muted/30"
+                  stroke="hsl(var(--muted)/0.3)"
                 />
                 <XAxis
                   dataKey="day"
                   stroke="currentColor"
-                  className="text-sm fill-muted-foreground"
+                  tick={{ className: "text-sm fill-muted-foreground" }}
                 />
                 <YAxis
                   stroke="currentColor"
-                  className="text-sm fill-muted-foreground"
+                  tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Area
@@ -314,16 +314,16 @@ export default function TrendsInsights() {
             >
               <CartesianGrid
                 strokeDasharray="3 3"
-                className="stroke-muted/30"
+                stroke="hsl(var(--muted)/0.3)"
               />
               <XAxis
                 dataKey="subject"
                 stroke="currentColor"
-                className="text-sm fill-muted-foreground"
+                tick={{ className: "text-sm fill-muted-foreground" }}
               />
               <YAxis
                 stroke="currentColor"
-                className="text-sm fill-muted-foreground"
+                tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
               />
               <Tooltip
                 contentStyle={{

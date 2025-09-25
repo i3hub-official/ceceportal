@@ -1,21 +1,33 @@
-// SidebarContext.tsx
 "use client";
+
 import React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useNavigation } from "./NavigationContext";
+import { LucideProps } from "lucide-react";
+
+// Accepts either a normal SVG component or a Lucide icon
+export type IconType =
+  | React.ComponentType<React.SVGProps<SVGSVGElement>>
+  | React.ForwardRefExoticComponent<
+      Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+    >;
+
+export type SidebarSubItem = {
+  id: string;
+  label: string;
+  icon: IconType;
+};
+
+export type SidebarItemProps = {
+  id: string;
+  label: string;
+  icon: IconType;
+  hasSubmenu?: boolean;
+  submenu?: SidebarSubItem[];
+};
 
 interface SidebarContextProps {
-  item: {
-    id: string;
-    label: string;
-    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    hasSubmenu?: boolean;
-    submenu?: Array<{
-      id: string;
-      label: string;
-      icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    }>;
-  };
+  item: SidebarItemProps;
 }
 
 const SidebarContext: React.FC<SidebarContextProps> = ({ item }) => {
@@ -30,30 +42,26 @@ const SidebarContext: React.FC<SidebarContextProps> = ({ item }) => {
   const Icon = item.icon;
   const isExpanded = activeParent === item.id;
 
-  // Check if any submenu item is active
   const isAnySubmenuActive = item.submenu?.some(
     (subItem) => subItem.id === activeMenu
   );
 
-  // Parent is active if itself or any child is active
   const isParentActive = activeMenu === item.id || isAnySubmenuActive;
 
   const handleParentClick = () => {
-    forceMenuUpdate(); // ✅ Force update on every click
+    forceMenuUpdate();
 
     if (item.hasSubmenu) {
-      // Toggle the parent expansion
       setActiveParent(isExpanded ? null : item.id);
     } else {
       setActiveMenu(item.id);
-      setActiveParent(null); // close any open submenu
+      setActiveParent(null);
     }
   };
 
   const handleSubmenuClick = (subItemId: string) => {
-    forceMenuUpdate(); // ✅ Force update on every click
+    forceMenuUpdate();
     setActiveMenu(subItemId);
-    // Don't close the parent when selecting a child
   };
 
   return (

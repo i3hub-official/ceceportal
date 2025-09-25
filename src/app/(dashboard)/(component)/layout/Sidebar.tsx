@@ -1,11 +1,30 @@
+// File: src/app/(dashboard)/(component)/layout/Sidebar.tsx
 "use client";
-import React from "react";
-import { X, User } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
-import { SidebarItems } from "../context/SidebarItems"; // Your array import
-import SidebarItem from "../context/SidebarContext"; // Your component import
 
-const Sidebar = () => {
+import React, {
+  ComponentType,
+  ForwardRefExoticComponent,
+  RefAttributes,
+  SVGProps,
+} from "react";
+import { X, User, LucideProps } from "lucide-react";
+import { useNavigation } from "../context/NavigationContext";
+import { SidebarItems } from "../context/SidebarItems"; // Array of sidebar items
+import SidebarItem from "../context/SidebarContext"; // React component
+
+export type SidebarItemProps = {
+  id: string;
+  label: string;
+  icon:
+    | ComponentType<SVGProps<SVGSVGElement>>
+    | ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+      >;
+  hasSubmenu?: boolean;
+  submenu?: SidebarItemProps[];
+};
+
+const Sidebar: React.FC = () => {
   const { sidebarOpen, toggleSidebar, setActiveMenu } = useNavigation();
 
   return (
@@ -33,7 +52,7 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        {/* Sidebar Footer - Clickable Admin User */}
+        {/* Sidebar Footer */}
         <div className="p-4 border-border">
           <button
             onClick={() => setActiveMenu("school-profile")}

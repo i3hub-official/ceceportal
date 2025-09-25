@@ -87,7 +87,7 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
 async function createAuditLog(
   adminUserId: string | null,
   action: string,
-  details: any,
+  details: Record<string, unknown>,
   ipAddress: string | null,
   userAgent: string | null,
   schoolId?: string
@@ -97,7 +97,7 @@ async function createAuditLog(
       data: {
         adminUserId: adminUserId || "system",
         action,
-        details,
+        details: JSON.parse(JSON.stringify(details)),
         ipAddress,
         userAgent,
         // Removed school property as it is not assignable
@@ -113,7 +113,26 @@ export async function POST(request: NextRequest) {
   const ipAddress =
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
   const userAgent = request.headers.get("user-agent") || "unknown";
-  let adminUser: any = null;
+  let adminUser: {
+    id?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    emailVerified?: boolean;
+    isActive?: boolean;
+    role?: string;
+    schools?: {
+      id: string;
+      centerName: string;
+      principalPhoneHash: string;
+      isVerified: boolean;
+      centerNumber: string;
+    }[];
+    _count?: {
+      auditLogs: number;
+      candidatesCreated: number;
+    };
+  } | null = null;
 
   try {
     // Rate limiting check
@@ -256,12 +275,12 @@ export async function POST(request: NextRequest) {
       {
         adminFound: !!adminUser,
         adminId: adminUser?.id,
-        schoolsCount: adminUser?.schools.length || 0,
+        schoolsCount: adminUser?.schools?.length ?? 0,
         ipAddress,
       },
       ipAddress,
       userAgent,
-      adminUser?.schools[0]?.id
+      adminUser?.schools?.[0]?.id
     );
 
     if (!adminUser) {
@@ -284,8 +303,8 @@ export async function POST(request: NextRequest) {
     // We'll need to protect the admin's phone to compare with principalPhoneHash
     if (adminUser.phone) {
       const protectedPhone = await protectData(adminUser.phone, "phone");
-      if (protectedPhone && adminUser.schools.length > 0) {
-        for (const school of adminUser.schools) {
+      if (protectedPhone && (adminUser?.schools?.length ?? 0) > 0) {
+        for (const school of adminUser.schools ?? []) {
           if (school.principalPhoneHash === protectedPhone.searchHash) {
             isPrincipal = true;
             principalOf = school.centerName;
@@ -295,10 +314,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const schoolsManaged = adminUser.schools.length;
+    const schoolsManaged = adminUser?.schools?.length ?? 0;
     const allSchoolsVerified =
-      adminUser.schools.length > 0
-        ? adminUser.schools.every(
+      (adminUser?.schools?.length ?? 0) > 0
+        ? (adminUser.schools ?? []).every(
             (school: { isVerified: boolean }) => school.isVerified
           )
         : false;
@@ -322,8 +341,8 @@ export async function POST(request: NextRequest) {
             role: adminUser.role,
             allSchoolsVerified,
             activityStats: {
-              auditLogs: adminUser._count.auditLogs,
-              candidatesCreated: adminUser._count.candidatesCreated,
+              auditLogs: adminUser._count?.auditLogs ?? 0,
+              candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
             },
           },
           message:
@@ -352,8 +371,8 @@ export async function POST(request: NextRequest) {
             role: adminUser.role,
             allSchoolsVerified,
             activityStats: {
-              auditLogs: adminUser._count.auditLogs,
-              candidatesCreated: adminUser._count.candidatesCreated,
+             auditLogs: adminUser._count?.auditLogs ?? 0,
+              candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
             },
           },
           message: "Operators are restricted to managing only one school.",
@@ -382,8 +401,8 @@ export async function POST(request: NextRequest) {
             role: adminUser.role,
             allSchoolsVerified,
             activityStats: {
-              auditLogs: adminUser._count.auditLogs,
-              candidatesCreated: adminUser._count.candidatesCreated,
+              auditLogs: adminUser._count?.auditLogs ?? 0,
+              candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
             },
           },
           message:
@@ -411,8 +430,8 @@ export async function POST(request: NextRequest) {
         role: adminUser.role,
         allSchoolsVerified,
         activityStats: {
-          auditLogs: adminUser._count.auditLogs,
-          candidatesCreated: adminUser._count.candidatesCreated,
+         auditLogs: adminUser._count?.auditLogs ?? 0,
+              candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
         },
         readonly: true, // Flag to indicate that admin info should be readonly
       },
@@ -432,7 +451,7 @@ export async function POST(request: NextRequest) {
       },
       ipAddress,
       userAgent,
-      adminUser?.schools[0]?.id
+      adminUser?.schools?.[0]?.id || undefined
     );
 
     let errorMessage = "Internal server error during NIN lookup";
