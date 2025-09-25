@@ -1,26 +1,132 @@
 @import "tailwindcss";
 
+/* Default (Light) Theme */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #171717;      /* stays strong, good for light */
+  --primary: #10b981;         /* Emerald */
+  --secondary: #06b6d4;       /* Cyan */
+  --accent: #f59e0b;          /* Amber */
+  --card: #f9fafb;            /* Light gray for contrast */
+  --border: #e5e7eb;          /* NEW: light borders */
+  --nav-height: 73px;       /* global nav */
+  --header-height: 64px;    /* your Header height */
 }
 
+/* Dark Theme Override (when .dark is applied) */
+.dark {
+  --background: #1a1a1a;      /* Dark but not harsh */
+  --foreground: #cbd5e1;      /* slate-300: softer than #ededed */
+  --primary: #34d399;         /* Slightly brighter emerald */
+  --secondary: #22d3ee;       /* Cyan works well */
+  --accent: #fbbf24;          /* Amber pops nicely */
+  --card: #262626;            /* A shade lighter than bg for cards */
+  --border: #374151;          /* NEW: slate-700 border */
+}
+
+
+/* Hook into Tailwind */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base body style */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* html */
+html, body, #--next {
+  height: auto;
+  min-height: 100vh;
+    font-size: 100%;
+  line-height: 1.5;
+}
+
+/* Mobile optimization for code blocks */
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Fix for sticky headers on mobile */
+.sticky {
+  position: sticky;
+  -webkit-position: sticky;
+}
+
+/* Ensure main content area has proper spacing */
+.min-h-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1 0 auto;
+}
+
+/* Dropdown Animation */
+.submenu-transition {
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+.submenu-enter {
+  max-height: 0;
+  opacity: 0;
+}
+.submenu-enter-active {
+  max-height: 500px; /* Adjust based on expected content */
+  opacity: 1;
+}
+
+.submenu-exit {
+  max-height: 500px; /* Adjust based on expected content */
+  opacity: 1;
+}
+
+.submenu-exit-active {
+  max-height: 0;
+  opacity: 0;
+}
+
+
+/* Dashboard Loader Effect and Animation   */
+@keyframes loadingBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
 }

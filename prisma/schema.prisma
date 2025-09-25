@@ -1,0 +1,343 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "./app/generated-prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+model AdminAuditLog {
+  id          String   @id @default(cuid())
+  adminUserId String
+  action      String // e.g., "LOGIN", "CREATED_CANDIDATE", "UPDATED_SCHOOL"
+  details     Json? // Additional action details
+  performedAt DateTime @default(now())
+  ipAddress   String?
+  userAgent   String?
+
+  // Relations
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  schoolId String?
+  school   School? @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@map("admin_audit_logs")
+}
+
+model School {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Basic Information
+  centerNumber String @unique
+  centerName   String
+  state        String
+  lga          String
+
+  // Contact Information
+  schoolEmail   String @unique
+  schoolPhone   String
+  schoolAddress String @db.Text
+
+  // School Details
+  schoolType       SchoolType
+  principalName    String
+  principalPhone   String
+  examOfficerPhone String?
+
+  // Hashes for sensitive info
+  schoolEmailHash      String  @unique
+  principalPhoneHash   String  @unique
+  examOfficerPhoneHash String?
+  schoolPhoneHash      String  @unique
+
+  // Status
+  isActive        Boolean   @default(true)
+  isVerified      Boolean   @default(false)
+  verifiedAt      DateTime?
+  verifiedBy      String?
+  emailVerified   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+
+  adminId String?
+
+  // Relationships
+  adminUsers   AdminUser[]     @relation("SchoolAdmins") // ✅ fixed
+  candidates   Candidate[]
+  examSessions ExamSession[]
+  auditLogs    AdminAuditLog[]
+  AdminUser    AdminUser[]
+
+  @@map("schools")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Personal Information
+  name  String
+  email String @unique
+  phone String
+  nin   String @unique
+
+  password  String
+  emailHash String @unique
+  phoneHash String @unique
+  ninHash   String @unique
+
+  // Account Status
+  isActive        Boolean   @default(true)
+  emailVerified   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+  lastLoginAt     DateTime?
+
+  // Role
+  role AdminRole @default(Admin)
+
+  // School Association
+  schoolId String?
+  school   School? @relation(fields: [schoolId], references: [id])
+
+  // Relationships
+  schools           School[]            @relation("SchoolAdmins") // ✅ matches School
+  sessions          Session[]
+  candidatesCreated Candidate[]         @relation("CandidateCreatedBy")
+  auditLogs         AdminAuditLog[]
+  EmailVerification EmailVerification[]
+
+  @@map("admin_users")
+}
+
+// User Sessions for authentication
+model Session {
+  id           String    @id @default(cuid())
+  sessionToken String    @unique
+  adminUserId  String
+  adminUser    AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  expires      DateTime
+  createdAt    DateTime  @default(now())
+
+  @@map("sessions")
+}
+
+// Candidates (updated with school relationship)
+model Candidate {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Personal Information
+  surname     String
+  firstName   String
+  otherName   String?
+  dateOfBirth DateTime
+  gender      Gender
+  nin         String      @unique
+  phoneNumber String
+  disability  Disability?
+
+  // Location
+  state String
+  lga   String
+
+  // File uploads
+  passportPhotoUrl String?
+
+  // Registration metadata
+  registrationNumber String             @unique
+  acceptedTerms      Boolean            @default(false)
+  registrationStatus RegistrationStatus @default(Pending)
+
+  // School Association
+  schoolId    String
+  school      School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdById String // Admin user who registered this candidate
+  createdBy   AdminUser @relation("CandidateCreatedBy", fields: [createdById], references: [id])
+
+  // Exam Association
+  examSessionId String?
+  examSession   ExamSession? @relation(fields: [examSessionId], references: [id])
+
+  // Audit fields
+  submittedAt DateTime?
+  verifiedAt  DateTime?
+  verifiedBy  String?
+
+  @@map("candidates")
+}
+
+// Exam Sessions (for different exam periods)
+model ExamSession {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Session Information
+  name        String // e.g., "2024 First Quarter Mock Exam"
+  description String?  @db.Text
+  examDate    DateTime
+  examTime    String // e.g., "09:00 AM"
+  duration    Int // Duration in minutes
+
+  // Registration Period
+  registrationStartDate DateTime
+  registrationEndDate   DateTime
+
+  // Status
+  status   ExamSessionStatus @default(Upcoming)
+  isActive Boolean           @default(true)
+
+  // Fees
+  registrationFee Decimal @db.Decimal(10, 2)
+
+  // Relationships
+  candidates Candidate[]
+  schools    School[]
+
+  @@map("exam_sessions")
+}
+
+// Password Reset Tokens
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  email     String
+  token     String    @unique
+  expires   DateTime
+  createdAt DateTime  @default(now())
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+
+  @@map("password_reset_tokens")
+}
+
+// Email Verification Tokens
+model EmailVerification {
+  id            String     @id @default(cuid())
+  adminId       String?
+  admin         AdminUser? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  schoolId      String?
+  emailHash     String
+  token         String     @unique
+  status        String     @default("PENDING") // e.g., "PENDING", "VERIFIED", "EXPIRED"
+  failureReason String?
+  expiresAt     DateTime
+  createdAt     DateTime   @default(now())
+  used          Boolean    @default(false)
+  usedAt        DateTime?
+  type          String // e.g., "ADMIN_EMAIL_VERIFICATION", "SCHOOL_EMAIL_VERIFICATION"
+  ipAddress     String?
+  userAgent     String?
+
+  @@map("email_verification")
+}
+
+// Nigerian States and LGAs for referential integrity
+model State {
+  id   String @id @default(cuid())
+  name String @unique
+  lgas LGA[]
+
+  @@map("states")
+}
+
+model LGA {
+  id      String @id @default(cuid())
+  name    String
+  stateId String
+  state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
+
+  @@unique([name, stateId])
+  @@map("lgas")
+}
+
+// Audit Logs
+model CandidateAuditLog {
+  id          String   @id @default(cuid())
+  candidateId String
+  action      String // e.g., "CREATED", "UPDATED", "VERIFIED", "REJECTED"
+  changes     Json? // Store what changed
+  performedBy String? // User ID who performed the action
+  performedAt DateTime @default(now())
+  ipAddress   String?
+  userAgent   String?
+
+  @@map("candidate_audit_logs")
+}
+
+// System Configuration
+model SystemConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  updatedAt   DateTime @updatedAt
+  updatedBy   String? // Admin user ID who updated
+
+  @@map("system_config")
+}
+
+// Enums
+enum Gender {
+  Male
+  Female
+
+  @@map("gender")
+}
+
+enum Disability {
+  None
+  Visual
+  Hearing
+  Physical
+  Learning
+  Other
+
+  @@map("disability")
+}
+
+enum RegistrationStatus {
+  Pending
+  Submitted
+  Verified
+  Rejected
+  Cancelled
+
+  @@map("registration_status")
+}
+
+enum SchoolType {
+  Secondary
+  Seminary
+
+  @@map("school_type")
+}
+
+enum AdminRole {
+  Super_Admin
+  Admin
+  Operator
+
+  @@map("admin_role")
+}
+
+enum ExamSessionStatus {
+  Upcoming
+  Registration_Open
+  Registration_Closed
+  In_Progress
+  Completed
+  Cancelled
+
+  @@map("exam_session_status")
+}
