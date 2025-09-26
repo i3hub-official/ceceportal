@@ -1,11 +1,35 @@
-// src/app/center/verify-email/VerifyCenterEmailPage.tsx
+// src/app/center/verify-email/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
-export default function VerifyCenterEmailPage() {
+// Loading component
+function VerificationLoading() {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            School Email Verification
+          </h2>
+          <p className="text-lg text-foreground/70 mb-8">
+            Loading verification page...
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main verification component
+function VerifyCenterEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -160,5 +184,14 @@ export default function VerifyCenterEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense wrapper
+export default function Page() {
+  return (
+    <Suspense fallback={<VerificationLoading />}>
+      <VerifyCenterEmailContent />
+    </Suspense>
   );
 }
