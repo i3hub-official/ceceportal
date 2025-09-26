@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run postcss:build && next build",
+    "postcss:build": "npx tailwindcss -i ./src/app/globals.css -o ./.next/static/css/globals.css --watch=false",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "prisma generate",
