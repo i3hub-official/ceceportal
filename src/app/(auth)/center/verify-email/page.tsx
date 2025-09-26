@@ -25,7 +25,7 @@ export default function VerifyCenterEmailPage() {
           return;
         }
 
-        // Make API call to backend route (no need to run JWTUtils here on the client)
+        // Make API call to backend route
         const response = await fetch("/api/center/verify-email", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
