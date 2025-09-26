@@ -10,7 +10,8 @@ export default function RecentActivity() {
         name: "Chinwe Okoro",
         dob: "2015-03-12",
         gender: "Female",
-        avatar: "https://i.pravatar.cc/40?img=1",
+        avatar:
+          "https://ui-avatars.com/api/?name=Chinwe+Okoro&background=10b981&color=fff&size=40",
         school: "St. Mary's Primary School",
       },
       time: "2 hours ago",
@@ -22,7 +23,8 @@ export default function RecentActivity() {
         name: "Emeka Nwankwo",
         dob: "2014-11-05",
         gender: "Male",
-        avatar: "https://i.pravatar.cc/40?img=5",
+        avatar:
+          "https://ui-avatars.com/api/?name=Emeka+Nwankwo&background=06b6d4&color=fff&size=40",
         school: "Holy Trinity Secondary School",
       },
       time: "Yesterday",
@@ -34,7 +36,8 @@ export default function RecentActivity() {
         name: "Adaobi Eze",
         dob: "2016-07-22",
         gender: "Female",
-        avatar: "https://i.pravatar.cc/40?img=9",
+        avatar:
+          "https://ui-avatars.com/api/?name=Adaobi+Eze&background=f59e0b&color=fff&size=40",
         school: "St. Joseph's College",
       },
       time: "2 days ago",
@@ -46,7 +49,8 @@ export default function RecentActivity() {
         name: "Chukwudi Onyema",
         dob: "2015-09-14",
         gender: "Male",
-        avatar: "https://i.pravatar.cc/40?img=11",
+        avatar:
+          "https://ui-avatars.com/api/?name=Chukwudi+Onyema&background=3b82f6&color=fff&size=40",
         school: "Sacred Heart Academy",
       },
       time: "3 days ago",
@@ -58,7 +62,8 @@ export default function RecentActivity() {
         name: "Ngozi Adeyemi",
         dob: "2014-12-08",
         gender: "Female",
-        avatar: "https://i.pravatar.cc/40?img=15",
+        avatar:
+          "https://ui-avatars.com/api/?name=Ngozi+Adeyemi&background=8b5cf6&color=fff&size=40",
         school: "St. Peter's Academy",
       },
       time: "4 days ago",
@@ -96,6 +101,7 @@ export default function RecentActivity() {
                   width={40}
                   height={40}
                   className="object-cover"
+                  unoptimized
                 />
               </div>
               <div

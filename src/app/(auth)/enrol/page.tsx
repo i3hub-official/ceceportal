@@ -349,7 +349,6 @@ export default function CandidateRegistrationPage() {
     localStorage.removeItem("cachedTimestamp");
   };
 
-  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -504,16 +503,16 @@ export default function CandidateRegistrationPage() {
       case 1:
         return (
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="alert alert-primary">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <User className="h-5 w-5 text-blue-400" />
+                  <User className="h-5 w-5 text-primary" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">
+                  <h3 className="text-sm font-medium text-primary">
                     Personal Information Required
                   </h3>
-                  <div className="mt-2 text-sm text-blue-700">
+                  <div className="mt-2 text-sm text-primary-80">
                     <p>
                       Please provide accurate personal information as it appears
                       on your official documents. All fields marked with * are
@@ -525,17 +524,17 @@ export default function CandidateRegistrationPage() {
             </div>
 
             {apiError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                <p className="text-sm text-red-700">{apiError}</p>
+              <div className="alert alert-error">
+                <p className="text-sm text-error">{apiError}</p>
               </div>
             )}
 
             {showValidationSummary && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                <h3 className="text-sm font-medium text-red-800 mb-2">
+              <div className="alert alert-error">
+                <h3 className="text-sm font-medium text-error mb-2">
                   Please fix the following errors:
                 </h3>
-                <ul className="text-sm text-red-700 list-disc list-inside">
+                <ul className="text-sm text-error list-disc list-inside">
                   {Object.entries(errors).map(([field, error]) => (
                     <li key={field}>{error}</li>
                   ))}
@@ -545,63 +544,51 @@ export default function CandidateRegistrationPage() {
 
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Surname *
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">Surname *</label>
+                <div className="input-group">
+                  <User className="input-icon-left" />
                   <input
                     type="text"
                     name="surname"
                     value={formData.surname}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.surname ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-input ${errors.surname ? "border-error" : ""}`}
                     placeholder="Enter your surname"
                   />
                 </div>
                 {errors.surname && (
-                  <p className="mt-1 text-sm text-red-500">{errors.surname}</p>
+                  <p className="mt-1 text-sm text-error">{errors.surname}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  First Name *
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">First Name *</label>
+                <div className="input-group">
+                  <User className="input-icon-left" />
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.firstName ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-input ${errors.firstName ? "border-error" : ""}`}
                     placeholder="Enter your first name"
                   />
                 </div>
                 {errors.firstName && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.firstName}
-                  </p>
+                  <p className="mt-1 text-sm text-error">{errors.firstName}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Other Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">Other Name</label>
+                <div className="input-group">
+                  <User className="input-icon-left" />
                   <input
                     type="text"
                     name="otherName"
                     value={formData.otherName}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="form-input"
                     placeholder="Enter other names (optional)"
                   />
                 </div>
@@ -610,42 +597,34 @@ export default function CandidateRegistrationPage() {
 
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Date of Birth *
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">Date of Birth *</label>
+                <div className="input-group">
+                  <Calendar className="input-icon-left" />
                   <input
                     type="date"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.dateOfBirth ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-input ${errors.dateOfBirth ? "border-error" : ""}`}
                     max={new Date().toISOString().split("T")[0]}
                   />
                 </div>
                 {errors.dateOfBirth && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-error">
                     {errors.dateOfBirth}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Gender *
-                </label>
-                <div className="relative">
-                  <User2Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">Gender *</label>
+                <div className="input-group">
+                  <User2Icon className="input-icon-left" />
                   <select
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.gender ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-select ${errors.gender ? "border-error" : ""}`}
                   >
                     <option value="">Select gender</option>
                     <option value="Male">Male</option>
@@ -653,21 +632,19 @@ export default function CandidateRegistrationPage() {
                   </select>
                 </div>
                 {errors.gender && (
-                  <p className="mt-1 text-sm text-red-500">{errors.gender}</p>
+                  <p className="mt-1 text-sm text-error">{errors.gender}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Disability
-                </label>
-                <div className="relative">
-                  <User2Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">Disability</label>
+                <div className="input-group">
+                  <User2Icon className="input-icon-left" />
                   <select
                     name="disability"
                     value={formData.disability}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="form-select"
                   >
                     <option value="">No disability</option>
                     <option value="Visual">Visual impairment</option>
@@ -682,18 +659,14 @@ export default function CandidateRegistrationPage() {
 
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  State *
-                </label>
-                <div className="relative">
-                  <LocationEdit className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">State *</label>
+                <div className="input-group">
+                  <LocationEdit className="input-icon-left" />
                   <select
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.state ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-select ${errors.state ? "border-error" : ""}`}
                     disabled={isLoadingStates}
                   >
                     <option value="">Select state</option>
@@ -711,23 +684,19 @@ export default function CandidateRegistrationPage() {
                   </select>
                 </div>
                 {errors.state && (
-                  <p className="mt-1 text-sm text-red-500">{errors.state}</p>
+                  <p className="mt-1 text-sm text-error">{errors.state}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  LGA *
-                </label>
-                <div className="relative">
-                  <LocationEdit className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">LGA *</label>
+                <div className="input-group">
+                  <LocationEdit className="input-icon-left" />
                   <select
                     name="lga"
                     value={formData.lga}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.lga ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-select ${errors.lga ? "border-error" : ""}`}
                     disabled={!formData.state || isLoadingLgas}
                   >
                     <option value="">Select LGA</option>
@@ -745,63 +714,53 @@ export default function CandidateRegistrationPage() {
                   </select>
                 </div>
                 {errors.lga && (
-                  <p className="mt-1 text-sm text-red-500">{errors.lga}</p>
+                  <p className="mt-1 text-sm text-error">{errors.lga}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  NIN *
-                </label>
-                <div className="relative">
-                  <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">NIN *</label>
+                <div className="input-group">
+                  <CreditCard className="input-icon-left" />
                   <input
                     type="tel"
                     name="nin"
                     value={formData.nin}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.nin ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-input ${errors.nin ? "border-error" : ""}`}
                     placeholder="11-digit NIN"
                     maxLength={11}
                   />
                 </div>
                 {errors.nin && (
-                  <p className="mt-1 text-sm text-red-500">{errors.nin}</p>
+                  <p className="mt-1 text-sm text-error">{errors.nin}</p>
                 )}
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Phone Number *
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+                <label className="form-label">Phone Number *</label>
+                <div className="input-group">
+                  <Phone className="input-icon-left" />
                   <input
                     type="tel"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                      errors.phoneNumber ? "border-red-500" : "border-border"
-                    }`}
+                    className={`form-input ${errors.phoneNumber ? "border-error" : ""}`}
                     placeholder="0800 123 4567"
                   />
                 </div>
                 {errors.phoneNumber && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-error">
                     {errors.phoneNumber}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Passport Photograph *
-                </label>
+                <label className="form-label">Passport Photograph *</label>
                 <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
                   <input
                     type="file"
@@ -829,11 +788,11 @@ export default function CandidateRegistrationPage() {
                       </>
                     ) : (
                       <div className="flex flex-col items-center">
-                        <Upload className="w-8 h-8 text-foreground/30 mb-2" />
-                        <span className="text-sm text-foreground/70">
+                        <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                        <span className="text-sm text-muted-foreground">
                           Click to upload passport photo
                         </span>
-                        <span className="text-xs text-foreground/50">
+                        <span className="text-xs text-muted-foreground">
                           Max 2MB, JPG/PNG
                         </span>
                       </div>
@@ -841,7 +800,7 @@ export default function CandidateRegistrationPage() {
                   </label>
                 </div>
                 {errors.passport && (
-                  <p className="mt-1 text-sm text-red-500">{errors.passport}</p>
+                  <p className="mt-1 text-sm text-error">{errors.passport}</p>
                 )}
               </div>
             </div>
@@ -851,7 +810,7 @@ export default function CandidateRegistrationPage() {
               onClick={() => {
                 if (validateStep1()) setStep(2);
               }}
-              className="w-full bg-primary text-white py-4 px-6 rounded-lg font-medium hover:bg-primary/90 transition flex items-center justify-center"
+              className="btn btn-primary w-full"
             >
               Continue to Review
             </button>
@@ -862,16 +821,16 @@ export default function CandidateRegistrationPage() {
         return (
           <div className="space-y-6">
             {/* Info Section */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="alert alert-primary">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <CheckCircle className="h-5 w-5 text-blue-400" />
+                  <CheckCircle className="h-5 w-5 text-primary" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">
+                  <h3 className="text-sm font-medium text-primary">
                     Review Your Information
                   </h3>
-                  <div className="mt-2 text-sm text-blue-700">
+                  <div className="mt-2 text-sm text-primary-80">
                     <p>
                       Please review your information carefully before proceeding
                       to terms and conditions.
@@ -882,7 +841,7 @@ export default function CandidateRegistrationPage() {
             </div>
 
             {/* Data Preview Card */}
-            <div className="bg-card border border-border rounded-xl shadow-sm p-6">
+            <div className="card">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-foreground">
                   Registration Preview
@@ -890,7 +849,7 @@ export default function CandidateRegistrationPage() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex items-center gap-2 text-primary hover:text-primary/80 text-sm"
+                  className="flex items-center gap-2 text-primary hover:text-primary-80 text-sm"
                 >
                   <Edit className="w-4 h-4" />
                   Edit
@@ -900,45 +859,51 @@ export default function CandidateRegistrationPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Personal Information */}
                 <div className="space-y-3">
-                  <h4 className="font-medium text-foreground border-b pb-2">
+                  <h4 className="font-medium text-foreground border-b border-border pb-2">
                     Personal Information
                   </h4>
 
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">Full Name:</span>
+                      <span className="text-muted-foreground">Full Name:</span>
                       <span className="font-medium">
                         {`${formData.surname} ${formData.firstName} ${formData.otherName || ""}`.trim()}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">Date of Birth:</span>
+                      <span className="text-muted-foreground">
+                        Date of Birth:
+                      </span>
                       <span className="font-medium">
                         {formData.dateOfBirth}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">Gender:</span>
+                      <span className="text-muted-foreground">Gender:</span>
                       <span className="font-medium">{formData.gender}</span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">Phone Number:</span>
+                      <span className="text-muted-foreground">
+                        Phone Number:
+                      </span>
                       <span className="font-medium">
                         {formData.phoneNumber}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">NIN:</span>
+                      <span className="text-muted-foreground">NIN:</span>
                       <span className="font-medium">{formData.nin}</span>
                     </div>
 
                     {formData.disability && (
                       <div className="flex justify-between">
-                        <span className="text-foreground/70">Disability:</span>
+                        <span className="text-muted-foreground">
+                          Disability:
+                        </span>
                         <span className="font-medium">
                           {formData.disability}
                         </span>
@@ -949,23 +914,23 @@ export default function CandidateRegistrationPage() {
 
                 {/* Location & Photo */}
                 <div className="space-y-3">
-                  <h4 className="font-medium text-foreground border-b pb-2">
+                  <h4 className="font-medium text-foreground border-b border-border pb-2">
                     Location & Photo
                   </h4>
 
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">State:</span>
+                      <span className="text-muted-foreground">State:</span>
                       <span className="font-medium">{formData.state}</span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-foreground/70">LGA:</span>
+                      <span className="text-muted-foreground">LGA:</span>
                       <span className="font-medium">{formData.lga}</span>
                     </div>
 
                     <div className="mt-4">
-                      <span className="text-foreground/70 block mb-2">
+                      <span className="text-muted-foreground block mb-2">
                         Passport Photo:
                       </span>
                       {passportPreview ? (
@@ -974,11 +939,11 @@ export default function CandidateRegistrationPage() {
                           alt="Passport photo"
                           width={80}
                           height={80}
-                          className="w-20 h-20 rounded-lg object-cover border"
+                          className="w-20 h-20 rounded-lg object-cover border border-border"
                         />
                       ) : (
-                        <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                          <User className="w-8 h-8 text-gray-400" />
+                        <div className="w-20 h-20 bg-muted rounded-lg flex items-center justify-center">
+                          <User className="w-8 h-8 text-muted-foreground" />
                         </div>
                       )}
                     </div>
@@ -992,14 +957,14 @@ export default function CandidateRegistrationPage() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="w-full sm:w-auto px-6 py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition"
+                className="btn btn-outline"
               >
                 Back to Edit
               </button>
               <button
                 type="button"
                 onClick={() => setStep(3)}
-                className="w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition"
+                className="btn btn-primary"
               >
                 Continue to Terms
               </button>
@@ -1011,16 +976,16 @@ export default function CandidateRegistrationPage() {
         return (
           <div className="space-y-6">
             {/* Info Section */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="alert alert-success">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <CheckCircle className="h-5 w-5 text-success" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">
+                  <h3 className="text-sm font-medium text-success">
                     Terms and Conditions
                   </h3>
-                  <div className="mt-2 text-sm text-green-700">
+                  <div className="mt-2 text-sm text-success-80">
                     <p>
                       Please review and accept the terms and conditions to
                       complete your registration.
@@ -1034,13 +999,13 @@ export default function CandidateRegistrationPage() {
 
             {/* Error */}
             {errors.acceptedTerms && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-sm text-red-700">{errors.acceptedTerms}</p>
+              <div className="alert alert-error">
+                <p className="text-sm text-error">{errors.acceptedTerms}</p>
               </div>
             )}
 
             {/* Terms and Conditions Content */}
-            <div className="bg-card rounded-lg p-6 max-h-96 overflow-y-auto">
+            <div className="card max-h-96 overflow-y-auto">
               <h3 className="text-lg font-semibold mb-4">
                 Terms and Conditions
               </h3>
@@ -1102,14 +1067,14 @@ export default function CandidateRegistrationPage() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="w-full sm:w-auto px-6 py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition"
+                className="btn btn-outline"
               >
                 Back to Review
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -1128,20 +1093,20 @@ export default function CandidateRegistrationPage() {
         return (
           <div className="text-center py-8">
             {/* Success Icon */}
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-green-600" />
+            <div className="w-16 h-16 rounded-full bg-success-10 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-10 h-10 text-success" />
             </div>
 
             {/* Title */}
             <h2 className="text-2xl font-bold text-foreground mb-4">
               Registration Successful!
             </h2>
-            <p className="text-foreground/70 mb-6 max-w-md mx-auto">
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
               Your examination registration has been completed successfully.
             </p>
 
             {/* Candidate Info Card */}
-            <div className="max-w-md mx-auto bg-card border border-border rounded-xl shadow-sm p-6 text-left space-y-4">
+            <div className="max-w-md mx-auto card text-left space-y-4">
               {/* Candidate Photo */}
               <div className="flex justify-center">
                 {passportPreview ? (
@@ -1150,11 +1115,11 @@ export default function CandidateRegistrationPage() {
                     alt="Candidate Photo"
                     width={96}
                     height={96}
-                    className="w-24 h-24 rounded-full object-cover border"
+                    className="w-24 h-24 rounded-full object-cover border border-border"
                   />
                 ) : (
-                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border">
-                    <User className="w-12 h-12 text-gray-400" />
+                  <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center border border-border">
+                    <User className="w-12 h-12 text-muted-foreground" />
                   </div>
                 )}
               </div>
@@ -1187,7 +1152,7 @@ export default function CandidateRegistrationPage() {
               <button
                 type="button"
                 onClick={resetForm}
-                className="block w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition"
+                className="btn btn-primary w-full"
               >
                 Register Another Candidate
               </button>
@@ -1195,7 +1160,7 @@ export default function CandidateRegistrationPage() {
               <button
                 type="button"
                 onClick={() => router.push("/dashboard")}
-                className="block w-full border border-primary text-primary py-3 rounded-lg font-medium hover:bg-primary/10 transition"
+                className="btn btn-outline w-full"
               >
                 Go to Dashboard
               </button>
@@ -1211,7 +1176,7 @@ export default function CandidateRegistrationPage() {
   return (
     <main className="flex-1 overflow-auto">
       <div className="p-4 bg-background transition-colors duration-300">
-        <div className="max-w-7xl mx-auto">
+        <div className="container">
           {/* Back link and title section */}
           <div className="mb-6">
             <button
@@ -1227,14 +1192,14 @@ export default function CandidateRegistrationPage() {
               <h1 className="text-2xl font-bold text-foreground mb-2">
                 Candidate Registration
               </h1>
-              <p className="text-foreground/70 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Register for CEC Mock Examinations
               </p>
             </div>
           </div>
 
           {/* Compact card layout */}
-          <div className="bg-card rounded-lg shadow-md overflow-hidden">
+          <div className="card shadow-md overflow-hidden">
             {/* Progress indicator header - Updated to show only 4 steps */}
             <div className="p-3 border-b border-border">
               <div className="flex items-center justify-between">
@@ -1244,10 +1209,10 @@ export default function CandidateRegistrationPage() {
                       <div
                         className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${
                           i < step
-                            ? "bg-green-500 text-white"
+                            ? "bg-success text-white"
                             : i === step
                               ? "bg-primary text-white"
-                              : "bg-gray-200 text-primary/50"
+                              : "bg-muted text-muted-foreground"
                         }`}
                       >
                         {i < step ? <CheckCircle className="w-3 h-3" /> : i}
@@ -1255,7 +1220,7 @@ export default function CandidateRegistrationPage() {
                       {i < 4 && (
                         <div
                           className={`w-2 h-0.5 ${
-                            i < step ? "bg-green-500" : "bg-gray-200"
+                            i < step ? "bg-success" : "bg-muted"
                           }`}
                         ></div>
                       )}
@@ -1263,7 +1228,7 @@ export default function CandidateRegistrationPage() {
                   ))}
                 </div>
               </div>
-              <div className="flex justify-between mt-1 text-xs text-foreground/60">
+              <div className="flex justify-between mt-1 text-xs text-muted-foreground">
                 <span>Personal Info</span>
                 <span>Review</span>
                 <span>Terms</span>
