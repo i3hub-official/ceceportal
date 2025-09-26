@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import AppHeader from "@/components/glob/AppHeader"; // Import your header component
 import { HeaderProvider } from "@/contexts/HeaderContext";
 
 export const metadata: Metadata = {
@@ -36,13 +36,18 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className="antialiased"
+        className="antialiased bg-background text-foreground"
         style={{
           fontFamily: "var(--font-sans)",
         }}
       >
         <HeaderProvider>
-          <main className="pt-15">{children}</main>
+          <AppHeader /> {/* Add your header component here */}
+          <main className="pt-header min-h-screen">
+            {" "}
+            {/* Use pt-header instead of pt-15 */}
+            {children}
+          </main>
           {/* <Footer /> */}
         </HeaderProvider>
       </body>

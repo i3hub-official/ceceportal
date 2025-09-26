@@ -39,92 +39,59 @@
     --color-accent: var(--accent);
     --color-card: var(--card);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
-}
-
-html,
-body,
-#--next {
-  height: auto;
-  min-height: 100vh;
-  font-size: 100%;
-  line-height: 1.5;
-}
-
-pre {
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.sticky {
-  position: sticky;
-  -webkit-position: sticky;
-}
-
-.min-h-screen {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.flex-1 {
-  flex: 1 0 auto;
-}
-
-.submenu-transition {
-  transition: all 0.3s ease-in-out;
-  overflow: hidden;
-}
-.submenu-enter {
-  max-height: 0;
-  opacity: 0;
-}
-.submenu-enter-active {
-  max-height: 500px;
-  opacity: 1;
-}
-.submenu-exit {
-  max-height: 500px;
-  opacity: 1;
-}
-.submenu-exit-active {
-  max-height: 0;
-  opacity: 0;
-}
-
-@keyframes loadingBar {
-  0% {
-    transform: translateX(-100%);
+  @layer components {
+    .page-content {
+      padding-top: var(--nav-height, 4rem);
+    }
   }
-  50% {
-    transform: translateX(0%);
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    transition:
+      background 0.3s ease,
+      color 0.3s ease;
   }
-  100% {
-    transform: translateX(100%);
+
+  html,
+  body,
+  #--next {
+    @apply h-auto min-h-screen text-base leading-relaxed;
+  }
+
+  pre {
+    @apply overflow-x-auto whitespace-pre-wrap break-words;
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+@layer components {
+  .submenu-transition {
+    @apply transition-submenu duration-submenu ease-submenu overflow-hidden;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .submenu-enter {
+    @apply max-h-0 opacity-0;
+  }
+
+  .submenu-enter-active {
+    @apply max-h-[500px] opacity-100;
+  }
+
+  .submenu-exit {
+    @apply max-h-[500px] opacity-100;
+  }
+
+  .submenu-exit-active {
+    @apply max-h-0 opacity-0;
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
-  opacity: 0;
+@layer utilities {
+  .min-h-screen {
+    @apply flex flex-col;
+  }
+
+  .flex-1 {
+    flex: 1 0 auto;
+  }
 }

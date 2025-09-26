@@ -1,3 +1,4 @@
+// components/AppHeader.tsx
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -35,14 +36,14 @@ export default function AppHeader() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-50 transition-all duration-300 h-header ${
         scrolled
           ? "bg-card/95 backdrop-blur-sm border-background shadow-sm"
           : "bg-card border-b border-background"
       }`}
     >
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-16 w-full">
+      <div className="px-4 sm:px-6 lg:px-8 h-full">
+        <div className="relative flex items-center justify-between h-full w-full">
           {/* --- Mobile left: only hamburger --- */}
           <div className="flex items-center md:hidden space-x-2">
             <button
@@ -107,29 +108,30 @@ export default function AppHeader() {
             )}
           </div>
         </div>
-        {/* --- Mobile dropdown --- */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-card border-t border-bordermt-4 flex flex-col divide-y divide-gray-200 sm:hidden border border-card rounded-md shadow-sm p-4 space-y-4">
-            <div className="flex gap-2">
-              <Link
-                href="center"
-                className="flex-1 flex items-center justify-center bg-transparent hover:bg-primary/10 text-foreground font-medium py-2 px-3 rounded-md transition"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User className="w-4 h-4 mr-2" /> Register
-              </Link>
-
-              <Link
-                href="/login"
-                className="flex-1 flex items-center justify-center bg-transparent hover:bg-primary/10 text-foreground font-medium py-2 px-3 rounded-md transition"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <LogInIcon className="w-4 h-4 mr-2" /> Login
-              </Link>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* --- Mobile dropdown --- */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-card border-t border-border mt-4 flex flex-col divide-y divide-gray-200 sm:hidden border border-card rounded-md shadow-sm p-4 space-y-4">
+          <div className="flex gap-2">
+            <Link
+              href="center"
+              className="flex-1 flex items-center justify-center bg-transparent hover:bg-primary/10 text-foreground font-medium py-2 px-3 rounded-md transition"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <User className="w-4 h-4 mr-2" /> Register
+            </Link>
+
+            <Link
+              href="/login"
+              className="flex-1 flex items-center justify-center bg-transparent hover:bg-primary/10 text-foreground font-medium py-2 px-3 rounded-md transition"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <LogInIcon className="w-4 h-4 mr-2" /> Login
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
