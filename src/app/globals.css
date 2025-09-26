@@ -1,52 +1,42 @@
 @import "tailwindcss";
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
 
-/* @import "tailwindcss/base";
-@tailwind utilities; */
-
-/* Default (Light) Theme */
+/* Define your CSS custom properties */
 :root {
   --background: #ffffff;
-  --foreground: #171717; /* stays strong, good for light */
-  --primary: #10b981; /* Emerald */
-  --secondary: #06b6d4; /* Cyan */
-  --accent: #f59e0b; /* Amber */
-  --card: #f9fafb; /* Light gray for contrast */
-  --border: #e5e7eb; /* NEW: light borders */
-  --nav-height: 73px; /* global nav */
-  --header-height: 64px; /* your Header height */
+  --foreground: #171717;
+  --primary: #10b981;
+  --secondary: #06b6d4;
+  --accent: #f59e0b;
+  --card: #f9fafb;
+  --border: #e5e7eb;
+  --nav-height: 73px;
+  --header-height: 64px;
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
 }
 
-/* Dark Theme Override (when .dark is applied) */
 .dark {
-  --background: #1a1a1a; /* Dark but not harsh */
-  --foreground: #cbd5e1; /* slate-300: softer than #ededed */
-  --primary: #34d399; /* Slightly brighter emerald */
-  --secondary: #22d3ee; /* Cyan works well */
-  --accent: #fbbf24; /* Amber pops nicely */
-  --card: #262626; /* A shade lighter than bg for cards */
-  --border: #374151; /* NEW: slate-700 border */
+  --background: #1a1a1a;
+  --foreground: #cbd5e1;
+  --primary: #34d399;
+  --secondary: #22d3ee;
+  --accent: #fbbf24;
+  --card: #262626;
+  --border: #374151;
 }
 
-/* Hook into Tailwind */
-@theme inline {
+/* Apply custom properties to Tailwind v4 */
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-card: var(--card);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 /* Base body style */
@@ -59,7 +49,6 @@ body {
     color 0.3s ease;
 }
 
-/* html */
 html,
 body,
 #--next {
@@ -103,21 +92,20 @@ pre {
   opacity: 0;
 }
 .submenu-enter-active {
-  max-height: 500px; /* Adjust based on expected content */
+  max-height: 500px;
   opacity: 1;
 }
 
 .submenu-exit {
-  max-height: 500px; /* Adjust based on expected content */
+  max-height: 500px;
   opacity: 1;
 }
-
 .submenu-exit-active {
   max-height: 0;
   opacity: 0;
 }
 
-/* Dashboard Loader Effect and Animation   */
+/* Dashboard Loader Effect and Animation */
 @keyframes loadingBar {
   0% {
     transform: translateX(-100%);
