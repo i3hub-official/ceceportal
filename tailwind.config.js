@@ -7,15 +7,6 @@ const config = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        primary: 'var(--primary)',
-        secondary: 'var(--secondary)',
-        accent: 'var(--accent)',
-        card: 'var(--card)',
-        border: 'var(--border)',
-      }
     },
   },
   plugins: [],
