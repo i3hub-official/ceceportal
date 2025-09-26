@@ -1,6 +1,8 @@
-/* @import "tailwindcss"; */
-@import "tailwindcss/base";
+@import "tailwindcss";
 @tailwind utilities;
+/* @import "tailwindcss/base";
+@tailwind utilities; */
+
 /* Default (Light) Theme */
 :root {
   --background: #ffffff;
