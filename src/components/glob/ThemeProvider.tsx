@@ -12,10 +12,6 @@ export default function ThemeProvider({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Set transition styles for smooth theme change
-    document.documentElement.style.transition =
-      "color 300ms ease, background-color 300ms ease";
-
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
