@@ -1,0 +1,4 @@
+# .vercelignore - make sure these are NOT ignored
+!tailwind.config.js
+!postcss.config.js
+!src/app/globals.css

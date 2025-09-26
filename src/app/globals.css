@@ -1,9 +1,7 @@
-@import "tailwindcss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Your custom CSS below */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -52,7 +50,6 @@ body {
     color 0.3s ease;
 }
 
-/* Rest of your custom CSS remains the same */
 html,
 body,
 #--next {
