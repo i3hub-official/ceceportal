@@ -672,9 +672,9 @@ const config = {
   // ================================
   // EXPERIMENTAL FEATURES
   // ================================
-  experimental: {
-    optimizeUniversalDefaults: true,
-  },
+  // experimental: {
+  //   optimizeUniversalDefaults: true,
+  // },
 };
 
 export default config;
