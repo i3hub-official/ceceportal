@@ -1,9 +1,9 @@
 // File: src/app/api/auth/login/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { cookies } from "next/headers";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { JWTUtils } from "@/lib/server/jwt";
 import { protectData, unprotectData } from "@/lib/security/dataProtection";
 import { verifyHash } from "@/lib/security/encryption";
 import { nanoid } from "nanoid";
@@ -91,7 +91,8 @@ export async function POST(request: NextRequest) {
 
       // Get the primary admin user for the school
       const primaryAdmin = school.adminUsers.find(
-        (admin: { role: string }) => admin.role === "Admin" || admin.role === "Super_Admin"
+        (admin: { role: string }) =>
+          admin.role === "Admin" || admin.role === "Super_Admin"
       );
 
       if (!primaryAdmin) {

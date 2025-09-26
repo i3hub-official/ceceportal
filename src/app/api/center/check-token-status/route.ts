@@ -1,7 +1,7 @@
 // src/app/api/center/check-token-status/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { prisma } from "@/lib/server/prisma";
+import { JWTUtils } from "@/lib/server/jwt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     // Verify the token
     const tokenData = await JWTUtils.verifyEmailToken(token);
-    
+
     if (!tokenData) {
       return NextResponse.json(
         {
@@ -90,7 +90,6 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Token status check error:", error);
 

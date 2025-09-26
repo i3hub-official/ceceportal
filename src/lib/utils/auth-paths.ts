@@ -1,26 +1,30 @@
 // File: src/config/auth-paths.ts
-export const PUBLIC_PATHS = ["/", "/sitemap", "/login", "/signup"] as const;
-
-export const PRIVATE_PATHS = [
-  // "/profile",
-  // "/profile/*",
-  // "/admin/",
-  // "/admin/*",
-  // "/dashboard",
-  // "/dashboard/*",
-  // "/api",
-  // "/api/*",
-  // "/settings",
-  // "/settings/*",
-  // "center",
-  // "center/*",
-  // "/edit",
-  // "/edit/*",
-  // "/view",
-  // "/view/*",
+export const PUBLIC_PATHS = [
+  "/",
+  "/sitemap",
+  "/center",
+  "/center/*",
+  "/login",
+  "/signup",
 ] as const;
 
-export const AUTH_PATHS = ["/login", "/signup"] as const;
+export const PRIVATE_PATHS = [
+  "/admin",
+  "/admin/*",
+  "/settings",
+  "/settings/*",
+  "/profile",
+  "/profile/*",
+] as const;
+
+export const AUTH_PATHS = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+  "/resend-verification",
+] as const;
 
 // Type exports
 export type PublicPath = (typeof PUBLIC_PATHS)[number];

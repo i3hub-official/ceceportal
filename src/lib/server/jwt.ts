@@ -1,4 +1,5 @@
-// src/lib/utils/jwt.ts
+// src/lib/server/jwt.ts
+// NO "use client" or "use server" directive needed for utilities
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 
 export interface TokenPayload extends JWTPayload {
@@ -31,10 +32,27 @@ class JWTError extends Error {
 
 export class JWTUtils {
   private static getSecretKey(): Uint8Array {
-    const secret = process.env.JWT_SECRET;
+    // This will only work on the server side
+    // Try JWT_SECRET first (for compatibility with existing tokens), then JWT_SUPER_SECRET
+    const secret = process.env.JWT_SECRET || process.env.JWT_SUPER_SECRET;
+
+    // Debugging - remove in production
+    if (process.env.NODE_ENV === "development") {
+      console.log("JWT Secret check:", {
+        hasJWT_SECRET: !!process.env.JWT_SECRET,
+        hasJWT_SUPER_SECRET: !!process.env.JWT_SUPER_SECRET,
+        usingSecret:
+          secret === process.env.JWT_SECRET ? "JWT_SECRET" : "JWT_SUPER_SECRET",
+        nodeEnv: process.env.NODE_ENV,
+        allEnvKeys: Object.keys(process.env).filter((key) =>
+          key.includes("JWT")
+        ),
+      });
+    }
+
     if (!secret) {
       throw new JWTError(
-        "JWT_SECRET environment variable is not set",
+        "JWT_SECRET or JWT_SUPER_SECRET environment variable is not set",
         "MISSING_SECRET"
       );
     }
@@ -52,6 +70,7 @@ export class JWTUtils {
 
   /**
    * Generate a JWT token with the provided payload
+   * SERVER-SIDE ONLY
    */
   static async generateToken(
     payload: TokenPayload,
@@ -80,6 +99,7 @@ export class JWTUtils {
 
   /**
    * Verify and decode a JWT token
+   * SERVER-SIDE ONLY
    */
   static async verifyToken(token: string): Promise<TokenPayload> {
     try {
@@ -110,6 +130,7 @@ export class JWTUtils {
 
   /**
    * Generate email verification token
+   * SERVER-SIDE ONLY
    */
   static async generateEmailVerificationToken(data: {
     type: "school" | "admin";
@@ -133,6 +154,7 @@ export class JWTUtils {
 
   /**
    * Generate password reset token
+   * SERVER-SIDE ONLY
    */
   static async generatePasswordResetToken(data: {
     adminId: string;
@@ -152,6 +174,7 @@ export class JWTUtils {
 
   /**
    * Generate authentication token for login
+   * SERVER-SIDE ONLY
    */
   static async generateAuthToken(data: {
     adminId: string;
@@ -177,6 +200,7 @@ export class JWTUtils {
 
   /**
    * Generate refresh token
+   * SERVER-SIDE ONLY
    */
   static async generateRefreshToken(adminId: string): Promise<string> {
     const payload: TokenPayload = {
@@ -192,6 +216,7 @@ export class JWTUtils {
 
   /**
    * Verify email verification token
+   * SERVER-SIDE ONLY
    */
   static async verifyEmailToken(token: string): Promise<{
     type: "school" | "admin";
@@ -218,6 +243,7 @@ export class JWTUtils {
 
   /**
    * Verify password reset token
+   * SERVER-SIDE ONLY
    */
   static async verifyPasswordResetToken(token: string): Promise<{
     adminId: string;
@@ -240,6 +266,7 @@ export class JWTUtils {
 
   /**
    * Verify authentication token
+   * SERVER-SIDE ONLY
    */
   static async verifyAuthToken(token: string): Promise<{
     adminId: string;
@@ -265,9 +292,13 @@ export class JWTUtils {
       centerNumber: payload.centerNumber as string,
     };
   }
+}
 
+// Client-safe utilities that don't need the secret
+export class JWTClientUtils {
   /**
    * Extract token from Authorization header
+   * CLIENT-SAFE
    */
   static extractTokenFromHeader(authorization: string | null): string | null {
     if (!authorization) return null;
@@ -279,19 +310,32 @@ export class JWTUtils {
   }
 
   /**
-   * Check if token is expired without throwing error
+   * Decode JWT payload without verification (CLIENT-SAFE but INSECURE)
+   * Only use this for reading non-sensitive data from tokens
+   * NEVER trust this data for security decisions
    */
-  static async isTokenExpired(token: string): Promise<boolean> {
+  static decodeTokenUnsafe(token: string): TokenPayload | null {
     try {
-      await this.verifyToken(token);
-      return false;
-    } catch (error) {
-      if (error instanceof JWTError && error.code === "TOKEN_EXPIRED") {
-        return true;
-      }
-      // For other errors, consider token as invalid/expired
-      return true;
+      const parts = token.split(".");
+      if (parts.length !== 3) return null;
+
+      const payload = JSON.parse(atob(parts[1]));
+      return payload as TokenPayload;
+    } catch {
+      return null;
     }
+  }
+
+  /**
+   * Check if token appears to be expired (CLIENT-SAFE but INSECURE)
+   * This only checks the exp claim without verification
+   * NEVER trust this for security - always verify on server
+   */
+  static isTokenApparentlyExpired(token: string): boolean {
+    const payload = this.decodeTokenUnsafe(token);
+    if (!payload?.exp) return true;
+
+    return Date.now() >= payload.exp * 1000;
   }
 }
 

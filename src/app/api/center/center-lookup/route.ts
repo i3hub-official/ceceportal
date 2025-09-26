@@ -1,6 +1,6 @@
 // src/app/api/center/center-lookup/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 
 interface CenterData {
   id: string;

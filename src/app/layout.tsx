@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AppHeader from "@/components/glob/AppHeader"; // Import your header component
-import { HeaderProvider } from "@/contexts/HeaderContext";
+import { HeaderProvider } from "@/components/context/HeaderContext";
 import Footer from "@/components/glob/Footer";
 
 export const metadata: Metadata = {

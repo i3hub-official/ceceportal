@@ -1,6 +1,6 @@
 // src/app/api/center/revoke-token/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Token revocation error:", error);
     return NextResponse.json(

@@ -1,27 +1,48 @@
 // src/app/api/center/verify-email/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { prisma } from "@/lib/server/prisma";
+import { JWTUtils } from "@/lib/server/jwt";
 
 export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const token = searchParams.get("token");
-    const schoolId = searchParams.get("schoolId");
+  return handleVerification(request);
+}
 
-    if (!token || !schoolId) {
+export async function POST(request: NextRequest) {
+  return handleVerification(request);
+}
+
+async function handleVerification(request: NextRequest) {
+  try {
+    let token: string | null = null;
+    let schoolId: string | null = null;
+
+    if (request.method === "GET") {
+      const { searchParams } = new URL(request.url);
+      token = searchParams.get("token");
+      schoolId = searchParams.get("schoolId");
+    } else {
+      const body = await request.json();
+      token = body.token;
+      schoolId = body.schoolId;
+    }
+
+    if (!token) {
       return NextResponse.json(
         {
           success: false,
-          message: "Invalid verification link. Missing token or school ID.",
+          message: "Invalid verification link. Missing token.",
         },
         { status: 400 }
       );
     }
 
+    // Get client info for audit logging
+    const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
+    const userAgent = request.headers.get("user-agent") || "unknown";
+
     // Verify the token
     const tokenData = await JWTUtils.verifyEmailToken(token);
-    
+
     if (!tokenData || tokenData.type !== "school") {
       return NextResponse.json(
         {
@@ -32,30 +53,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check if the token matches the school ID
-    if (tokenData.entityId !== schoolId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid verification link. School ID mismatch.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Get client info for audit logging
-    const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
-    const userAgent = request.headers.get("user-agent") || "unknown";
+    // Extract school ID from token if not provided
+    const targetSchoolId = schoolId || tokenData.entityId;
 
     // Check if token exists and is valid in database
     const emailVerification = await prisma.emailVerification.findFirst({
       where: {
         token,
-        schoolId,
         status: "PENDING",
         expiresAt: {
           gt: new Date(),
         },
+        ...(targetSchoolId && { schoolId: targetSchoolId }),
       },
     });
 
@@ -69,9 +78,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Use schoolId from database record if available
+    const dbSchoolId = emailVerification.schoolId || targetSchoolId;
+
     // Get the school
     const school = await prisma.school.findUnique({
-      where: { id: schoolId },
+      where: { id: dbSchoolId },
     });
 
     if (!school) {
@@ -84,13 +96,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Get system user for audit logging
+    let systemUser = null;
+    try {
+      systemUser = await prisma.adminUser.findUnique({
+        where: { email: process.env.SA_EMAIL || "system_sa@i3hub.com.ng" },
+      });
+    } catch (error) {
+      console.error("Error finding system user:", error);
+    }
+
     // Update school email verification status
     const updatedSchool = await prisma.school.update({
-      where: { id: schoolId },
-      data: { 
+      where: { id: dbSchoolId },
+      data: {
         emailVerified: true,
         emailVerifiedAt: new Date(),
-        verifiedBy: "EMAIL_VERIFICATION",
+        verifiedBy: systemUser?.id || null,
       },
     });
 
@@ -101,24 +123,32 @@ export async function GET(request: NextRequest) {
         status: "VERIFIED",
         used: true,
         usedAt: new Date(),
+        failureReason: null,
       },
     });
 
-    // Create audit log
-    await prisma.adminAuditLog.create({
-      data: {
-        adminUserId: school.adminId || "system",
-        action: "SCHOOL_EMAIL_VERIFIED",
-        details: {
-          schoolId: school.id,
-          schoolName: school.centerName,
-          centerNumber: school.centerNumber,
-          verificationDate: new Date().toISOString(),
-        },
-        ipAddress,
-        userAgent,
-      },
-    });
+    // Create audit log if system user exists
+    if (systemUser) {
+      try {
+        await prisma.adminAuditLog.create({
+          data: {
+            adminUserId: systemUser.id,
+            action: "SCHOOL_EMAIL_VERIFIED",
+            details: {
+              schoolId: school.id,
+              schoolName: school.centerName,
+              centerNumber: school.centerNumber,
+              verificationDate: new Date().toISOString(),
+            },
+            ipAddress,
+            userAgent,
+          },
+        });
+      } catch (auditError) {
+        console.error("Failed to create audit log:", auditError);
+        // Continue even if audit log fails
+      }
+    }
 
     // Return success response
     return NextResponse.json(
@@ -129,7 +159,6 @@ export async function GET(request: NextRequest) {
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("School email verification error:", error);
 

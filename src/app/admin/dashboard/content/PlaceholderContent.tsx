@@ -7,7 +7,7 @@ import {
   Shield,
   School,
 } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
+import { useNavigation } from "../../../../components/context/NavigationContext";
 
 const iconMap = {
   candidates: Users,

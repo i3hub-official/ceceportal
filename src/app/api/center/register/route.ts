@@ -1,9 +1,9 @@
 // src/app/api/center/register/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { protectData } from "@/lib/security/dataProtection";
 import { EmailService } from "@/lib/services/emailService";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { JWTUtils } from "@/lib/server/jwt";
 
 const emailService = EmailService.getInstance();
 
@@ -409,7 +409,7 @@ export async function POST(request: NextRequest) {
       },
       {
         maxWait: 5000, // wait up to 5s for a free connection
-        timeout: 20000, // allow this transaction up to 20s to finish
+        timeout: 15000, // allow this transaction up to 20s to finish
       }
     );
 

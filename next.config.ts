@@ -24,7 +24,7 @@ const certPath =
   path.resolve(
     __dirname,
     "certs",
-    "rootCA.pem" // adjust if you named it differently
+    "localhost.crt" // adjust if you named it differently
   );
 
 // ✅ log info at startup

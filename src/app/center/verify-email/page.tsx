@@ -1,10 +1,8 @@
-// File: src/app/admin/verify-email/page.tsx
-
+// src/app/center/verify-email/page.tsx
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { JWTUtils } from "@/lib/utils/jwt";
 import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 // Loading component
@@ -19,7 +17,7 @@ function VerificationLoading() {
             </div>
           </div>
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Email Verification
+            School Email Verification
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
             Loading verification page...
@@ -31,59 +29,39 @@ function VerificationLoading() {
 }
 
 // Main verification component
-function VerifyEmailContent() {
+function VerifyCenterEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
-  const [message, setMessage] = useState("Verifying your email...");
+  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [message, setMessage] = useState("Verifying your school email...");
 
   useEffect(() => {
     const verifyEmail = async () => {
       try {
         const token = searchParams.get("token");
-        const adminId = searchParams.get("adminId");
+        const schoolId = searchParams.get("schoolId");
 
-        // Check for required parameters
-        if (!token || !adminId) {
+        if (!token) {
           setStatus("error");
-          setMessage("Invalid verification link. Missing token or admin ID.");
+          setMessage("Invalid verification link. Missing token.");
           return;
         }
 
-        // Verify the token
-        const tokenData = await JWTUtils.verifyEmailToken(token);
-
-        // Verify that the adminId in the token matches the one in the URL
-        if (tokenData.entityId !== adminId) {
-          setStatus("error");
-          setMessage("Invalid verification link. Admin ID mismatch.");
-          return;
-        }
-
-        // Make API call to update the admin's email verification status
-        const response = await fetch("/api/admin/verify-email", {
+        // Make API call to backend route
+        const response = await fetch("/api/center/verify-email", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token,
-            adminId,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, schoolId }),
         });
 
         const data = await response.json();
 
         if (response.ok && data.success) {
           setStatus("success");
-          setMessage("Your email has been successfully verified!");
+          setMessage(`Your school email for ${data.schoolName || "your school"} has been successfully verified!`);
         } else {
           setStatus("error");
-          setMessage(
-            data.message || "Email verification failed. Please try again."
-          );
+          setMessage(data.message || "Email verification failed. Please try again.");
         }
       } catch (error) {
         console.error("Email verification error:", error);
@@ -100,12 +78,10 @@ function VerifyEmailContent() {
   }, [searchParams]);
 
   useEffect(() => {
-    // Redirect after 5 seconds
     if (status !== "loading") {
       const timer = setTimeout(() => {
         router.push("/login");
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [status, router]);
@@ -116,11 +92,17 @@ function VerifyEmailContent() {
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-8 h-8 text-white" />
+              {status === "loading" ? (
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+              ) : status === "success" ? (
+                <CheckCircle className="w-8 h-8 text-white" />
+              ) : (
+                <XCircle className="w-8 h-8 text-white" />
+              )}
             </div>
           </div>
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Email Verification
+            School Email Verification
           </h2>
           <p className="text-lg text-muted-foreground mb-8">{message}</p>
         </div>
@@ -138,7 +120,7 @@ function VerifyEmailContent() {
 
             {status === "success" && (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-success-10 rounded-full flex items-center justify-center mb-4">
+                <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mb-4">
                   <CheckCircle className="w-8 h-8 text-success" />
                 </div>
                 <p className="text-success font-medium text-center mb-4">
@@ -152,7 +134,7 @@ function VerifyEmailContent() {
 
             {status === "error" && (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-error-10 rounded-full flex items-center justify-center mb-4">
+                <div className="w-16 h-16 bg-error/10 rounded-full flex items-center justify-center mb-4">
                   <XCircle className="w-8 h-8 text-error" />
                 </div>
                 <p className="text-error font-medium text-center mb-4">
@@ -164,13 +146,13 @@ function VerifyEmailContent() {
                 <div className="alert alert-warning w-full">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <AlertCircle className="h-5 w-5 text-warning" />
+                      <AlertCircle className="h-5 w-5 text-warning-foreground" />
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-warning">
+                      <h3 className="text-sm font-medium text-warning-foreground">
                         Need help?
                       </h3>
-                      <div className="mt-2 text-sm text-warning-80">
+                      <div className="mt-2 text-sm text-warning-foreground/80">
                         <p>
                           If you continue to have issues, please contact our
                           support team at{" "}
@@ -210,10 +192,10 @@ function VerifyEmailContent() {
 }
 
 // Main page component with Suspense wrapper
-export default function VerifyEmailPage() {
+export default function Page() {
   return (
     <Suspense fallback={<VerificationLoading />}>
-      <VerifyEmailContent />
+      <VerifyCenterEmailContent />
     </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 // File: src/app/api/setup/system-user/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { protectData } from "@/lib/security/dataProtection";
 import bcrypt from "bcryptjs";
 

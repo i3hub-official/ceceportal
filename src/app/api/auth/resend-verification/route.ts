@@ -1,8 +1,8 @@
 // File: src/app/api/auth/resend-verification/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { prisma } from "@/lib/server/prisma";
+import { JWTUtils } from "@/lib/server/jwt";
 import { protectData, unprotectData } from "@/lib/security/dataProtection";
 import { EmailService } from "@/lib/services/emailService";
 
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     // Determine if login is email or phone
     const isEmail = login.includes("@");
     const loginType = isEmail ? "email" : "phone";
-    
+
     // Normalize login based on type
     const normalizedLogin = isEmail ? login.trim().toLowerCase() : login.trim();
 
@@ -123,7 +123,10 @@ export async function POST(request: NextRequest) {
           token: schoolToken,
           expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
           type: "SCHOOL_EMAIL_VERIFICATION",
-          ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
+          ipAddress:
+            request.headers.get("x-forwarded-for") ||
+            request.headers.get("x-real-ip") ||
+            "unknown",
           userAgent: request.headers.get("user-agent") || "unknown",
         },
       });
@@ -207,7 +210,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Resend verification error:", error);
     return NextResponse.json(
-      { success: false, message: "An error occurred while resending verification" },
+      {
+        success: false,
+        message: "An error occurred while resending verification",
+      },
       { status: 500 }
     );
   }

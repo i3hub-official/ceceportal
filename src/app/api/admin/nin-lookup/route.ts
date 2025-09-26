@@ -1,7 +1,7 @@
 // /src/app/api/admin/nin-lookup/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { protectData } from "@/lib/security/dataProtection";
 import { z } from "zod";
 
@@ -71,7 +71,7 @@ async function createAuditLog(
     // If no adminUserId is provided, use the system user
     if (!adminUserId) {
       const systemUser = await prisma.adminUser.findUnique({
-        where: { email: process.env.SA_EMAIL || "system@example.com" },
+        where: { email: process.env.SA_EMAIL || "system_sa@i3hub.com.ng" },
       });
 
       if (!systemUser) {

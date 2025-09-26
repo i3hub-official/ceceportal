@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { useNavigation } from "../context/NavigationContext";
-import DashboardContent from "../content/DashboardContent";
-import PlaceholderContent from "../content/PlaceholderContent";
+import { useNavigation } from "./NavigationContext";
+import DashboardContent from "../../app/admin/dashboard/content/DashboardContent";
+import PlaceholderContent from "../../app/admin/dashboard/content/PlaceholderContent";
 
 // Candidate Forms
-import NewCandidate from "../forms/(candidates)/New-Candidate";
+import NewCandidate from "../../app/admin/candidates/New-Candidate";
 // import ModifyCandidate from "../forms/Modify-Candidate";
-import ViewCandidate from "../forms/(candidates)/View-Candidate";
+import ViewCandidate from "../../app/admin/candidates/View-Candidate";
 
 // Assessment Forms
 // import ComputeAssessment from "../forms/Compute-Assessment";

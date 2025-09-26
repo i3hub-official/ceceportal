@@ -8,9 +8,9 @@ import React, {
   SVGProps,
 } from "react";
 import { X, User, LucideProps } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
-import { SidebarItems } from "../context/SidebarItems"; // Array of sidebar items
-import SidebarItem from "../context/SidebarContext"; // React component
+import { useNavigation } from "./NavigationContext";
+import { SidebarItems } from "./SidebarItems"; // Array of sidebar items
+import SidebarItem from "./SidebarContext"; // React component
 
 export type SidebarItemProps = {
   id: string;

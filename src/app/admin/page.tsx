@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
-import { useLoading } from "@/app/(dashboard)/(component)/context/LoadingContext";
-import { useNavigation } from "@/app/(dashboard)/(component)/context/NavigationContext";
-import Sidebar from "@/app/(dashboard)/(component)/layout/Sidebar"; // Fixed import path
-import Header from "@/app/(dashboard)/(component)/layout/Header";
-import MainContent from "@/app/(dashboard)/(component)/layout/MainContent";
-import LoadingScreen from "@/app/(dashboard)/(component)/context/LoadingScreen";
+import { useLoading } from "@/components/context/LoadingContext";
+import { useNavigation } from "@/components/context/NavigationContext";
+import Sidebar from "@/components/context/Sidebar"; // Fixed import path
+import Header from "@/components/context/Header";
+import MainContent from "@/components/context/MainContent";
+import LoadingScreen from "@/components/context/LoadingScreen";
 
 const Dashboard = () => {
   const { loading, setLoading } = useLoading();

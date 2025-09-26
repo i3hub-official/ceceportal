@@ -1,7 +1,7 @@
 // File: src/app/api/admin/lookup-phone/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { protectData, unprotectData } from "@/lib/security/dataProtection";
 import { cookies } from "next/headers";
 
@@ -116,37 +116,42 @@ export async function POST(request: NextRequest) {
 
     // Decrypt sensitive data for admin users
     const decryptedAdminUsers = await Promise.all(
-      adminUsers.map(async (admin: {
-        id: string;
-        name: string;
-        email: string;
-        role: string;
-        isActive: boolean;
-        emailVerified: boolean;
-        lastLoginAt: Date | null;
-        createdAt: Date;
-        school: {
+      adminUsers.map(
+        async (admin: {
           id: string;
-          centerNumber: string;
-          centerName: string;
-        } | null;
-      }) => ({
-        id: admin.id,
-        name: await unprotectData(admin.name, "name"),
-        email: await unprotectData(admin.email, "email"),
-        role: admin.role,
-        isActive: admin.isActive,
-        emailVerified: admin.emailVerified,
-        lastLoginAt: admin.lastLoginAt,
-        createdAt: admin.createdAt,
-        school: admin.school
-          ? {
-              id: admin.school.id,
-              centerNumber: admin.school.centerNumber,
-              centerName: await unprotectData(admin.school.centerName, "name"),
-            }
-          : null,
-      }))
+          name: string;
+          email: string;
+          role: string;
+          isActive: boolean;
+          emailVerified: boolean;
+          lastLoginAt: Date | null;
+          createdAt: Date;
+          school: {
+            id: string;
+            centerNumber: string;
+            centerName: string;
+          } | null;
+        }) => ({
+          id: admin.id,
+          name: await unprotectData(admin.name, "name"),
+          email: await unprotectData(admin.email, "email"),
+          role: admin.role,
+          isActive: admin.isActive,
+          emailVerified: admin.emailVerified,
+          lastLoginAt: admin.lastLoginAt,
+          createdAt: admin.createdAt,
+          school: admin.school
+            ? {
+                id: admin.school.id,
+                centerNumber: admin.school.centerNumber,
+                centerName: await unprotectData(
+                  admin.school.centerName,
+                  "name"
+                ),
+              }
+            : null,
+        })
+      )
     );
 
     // Log the lookup action

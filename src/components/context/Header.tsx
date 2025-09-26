@@ -2,8 +2,8 @@
 "use client";
 import React from "react";
 import { Search, Bell, Sun, Moon } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
-import { useTheme } from "../context/ThemeContext";
+import { useNavigation } from "./NavigationContext";
+import { useTheme } from "./ThemeContext";
 
 const Header = () => {
   const { toggleSidebar, sidebarOpen, activeMenu } = useNavigation();

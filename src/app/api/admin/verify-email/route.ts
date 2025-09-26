@@ -1,12 +1,30 @@
-// File: src/app/api/admin/verify-email/route.ts
-
+// src/app/api/admin/verify-email/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { prisma } from "@/lib/server/prisma";
+import { JWTUtils, JWTError } from "@/lib/server/jwt";
+
+export async function GET(request: NextRequest) {
+  return handleVerification(request);
+}
 
 export async function POST(request: NextRequest) {
+  return handleVerification(request);
+}
+
+async function handleVerification(request: NextRequest) {
   try {
-    const { token, adminId } = await request.json();
+    let token: string | null = null;
+    let adminId: string | null = null;
+
+    if (request.method === "GET") {
+      const { searchParams } = new URL(request.url);
+      token = searchParams.get("token");
+      adminId = searchParams.get("adminId");
+    } else {
+      const body = await request.json();
+      token = body.token;
+      adminId = body.adminId;
+    }
 
     if (!token || !adminId) {
       return NextResponse.json(
@@ -15,13 +33,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify the token
+    const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
+    const userAgent = request.headers.get("user-agent") || "unknown";
+
+    // Verify JWT token
     const tokenData = await JWTUtils.verifyEmailToken(token);
 
-    // Verify that the adminId in the token matches the one provided
-    if (tokenData.entityId !== adminId) {
+    if (
+      !tokenData ||
+      tokenData.type !== "admin" ||
+      tokenData.entityId !== adminId
+    ) {
       return NextResponse.json(
-        { success: false, message: "Invalid verification link" },
+        { success: false, message: "Invalid or expired verification link" },
         { status: 400 }
       );
     }
@@ -30,7 +54,6 @@ export async function POST(request: NextRequest) {
     const adminUser = await prisma.adminUser.findUnique({
       where: { id: adminId },
     });
-
     if (!adminUser) {
       return NextResponse.json(
         { success: false, message: "Admin user not found" },
@@ -38,7 +61,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if already verified
+    if (adminUser.id !== tokenData.entityId) {
+      return NextResponse.json(
+        { success: false, message: "Incorrect user's token" },
+        { status: 400 }
+      );
+    }
+
     if (adminUser.emailVerified) {
       return NextResponse.json(
         { success: false, message: "Email is already verified" },
@@ -46,8 +75,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update the admin user's email verification status
-    await prisma.adminUser.update({
+    // Get system user for audit logging fallback
+    let systemUser = null;
+    try {
+      systemUser = await prisma.adminUser.findUnique({
+        where: { email: process.env.SA_EMAIL || "system@example.com" },
+      });
+    } catch (error) {
+      console.error("Error finding system user:", error);
+    }
+
+    // Check emailVerification token
+    const emailVerification = await prisma.emailVerification.findFirst({
+      where: {
+        adminId,
+        token,
+        status: "PENDING",
+        expiresAt: { gt: new Date() },
+        type: "ADMIN_EMAIL_VERIFICATION",
+      },
+    });
+
+    if (!emailVerification) {
+      return NextResponse.json(
+        { success: false, message: "Invalid or expired verification token" },
+        { status: 400 }
+      );
+    }
+
+    // Update admin email verification
+    const updatedAdmin = await prisma.adminUser.update({
       where: { id: adminId },
       data: {
         emailVerified: true,
@@ -55,44 +112,51 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Update the email verification record
-    await prisma.emailVerification.updateMany({
-      where: {
-        adminId,
-        status: "PENDING",
-        type: "ADMIN_EMAIL_VERIFICATION",
-      },
-      data: {
-        status: "VERIFIED",
-        used: true,
-        usedAt: new Date(),
-      },
+    // Mark this token as used
+    await prisma.emailVerification.update({
+      where: { id: emailVerification.id },
+      data: { status: "VERIFIED", used: true, usedAt: new Date() },
     });
 
-    // Log the verification action
-    await prisma.adminAuditLog.create({
-      data: {
-        adminUserId: adminId,
-        action: "EMAIL_VERIFIED",
-        details: { type: "admin" },
-        ipAddress:
-          request.headers.get("x-forwarded-for") || "unknown",
-        userAgent: request.headers.get("user-agent") || "unknown",
-      },
-    });
+    // Create audit log
+    if (systemUser) {
+      try {
+        await prisma.adminAuditLog.create({
+          data: {
+            adminUserId: systemUser.id,
+            action: "ADMIN_EMAIL_VERIFIED",
+            details: {
+              adminId: updatedAdmin.id,
+              email: updatedAdmin.email,
+              verificationDate: new Date().toISOString(),
+            },
+            ipAddress,
+            userAgent,
+          },
+        });
+      } catch (auditError) {
+        console.error("Failed to create audit log:", auditError);
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      message: "Email verified successfully",
+      message: "Admin email verified successfully",
+      adminEmail: updatedAdmin.email,
     });
   } catch (error) {
-    console.error("Email verification error:", error);
+    console.error("Admin email verification error:", error);
 
-    if (error instanceof Error && error.name === "JWTError") {
-      return NextResponse.json(
-        { success: false, message: "Invalid or expired verification link" },
-        { status: 400 }
-      );
+    if (error instanceof JWTError) {
+      let message = "Invalid or expired verification link";
+      if (error.code === "TOKEN_EXPIRED")
+        message = "Verification link has expired";
+      if (error.code === "INVALID_TOKEN" || error.code === "INVALID_SIGNATURE")
+        message = "Invalid verification link";
+      if (error.code === "INVALID_TOKEN_TYPE")
+        message = "Invalid verification token type";
+
+      return NextResponse.json({ success: false, message }, { status: 400 });
     }
 
     return NextResponse.json(
@@ -104,5 +168,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
