@@ -703,13 +703,36 @@
   transition-property:
     color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: ease-in-out;
-  transition-duration: 50ms;
+  transition-duration: 300ms;
 }
 
 /* For elements that should transition more smoothly */
 .transition-theme {
   transition:
-    background-color 100ms ease-in-out,
+    background-color 300ms ease-in-out,
     border-color 100ms ease-in-out,
     color 100ms ease-in-out;
 }
+
+/* Hamburger Menu */
+.hamburger-line {
+  @apply block h-0.5 w-6 rounded bg-foreground transition-all duration-300 ease-in-out;
+  /* We rely fully on Tailwind’s transition utilities */
+}
+
+/* Ensure smooth transitions for all header buttons */
+header button {
+  transition:
+    background-color 0.3s ease-in-out,
+    transform 0.2s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+
+header button:hover {
+  transform: translateY(-1px);
+}
+
+header button:active {
+  transform: translateY(0);
+}
+/* Hamburger Menu Ends */

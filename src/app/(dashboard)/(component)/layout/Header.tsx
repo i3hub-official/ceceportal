@@ -1,12 +1,13 @@
-// src\app\(dashboard)\(component)\layout\Header.tsx
+// src/app/(dashboard)/(component)/layout/Header.tsx
 "use client";
 import React from "react";
-import { Menu, Search, Bell, Sun, Moon } from "lucide-react";
+import { Search, Bell, Sun, Moon } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
 import { useTheme } from "../context/ThemeContext";
 
 const Header = () => {
-  const { toggleSidebar, activeMenu } = useNavigation();
+  const { toggleSidebar, sidebarOpen, activeMenu } = useNavigation();
+
   const { darkMode, toggleTheme } = useTheme();
 
   const schoolName = "All Saints' Secondary School";
@@ -21,9 +22,21 @@ const Header = () => {
         {/* Sidebar toggle (mobile only) */}
         <button
           onClick={toggleSidebar}
-          className="lg:hidden p-2 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20"
+          className="relative z-50 flex flex-col justify-center items-center w-10 h-10 lg:hidden rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20 -mt-1 sm:mt-0"
         >
-          <Menu size={20} />
+          <span
+            className={`hamburger-line ${
+              sidebarOpen ? "rotate-45 translate-y-1.5" : ""
+            }`}
+          />
+          <span
+            className={`hamburger-line ${sidebarOpen ? "opacity-0" : ""}`}
+          />
+          <span
+            className={`hamburger-line ${
+              sidebarOpen ? "-rotate-45 -translate-y-1.5" : ""
+            }`}
+          />
         </button>
 
         <div className="mb-4 mt-7">

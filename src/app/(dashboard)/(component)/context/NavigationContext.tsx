@@ -1,4 +1,4 @@
-// NavigationContext.tsx
+// File: src/app/(dashboard)/(component)/context/NavigationContext.tsx
 "use client";
 import React, { createContext, useContext, useState } from "react";
 
