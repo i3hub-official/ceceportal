@@ -291,12 +291,61 @@ export async function POST(request: NextRequest) {
 
     // Transaction: create school + admin (if new)
     console.log("💾 Starting database transaction...");
+    interface ProtectedData {
+      encrypted: string;
+      searchHash?: string | null;
+    }
+
+    interface AdminUser {
+      id: string;
+      name: string;
+      email: string;
+      emailHash: string;
+      phone: string;
+      phoneHash: string;
+      password: string;
+      nin: string;
+      ninHash: string;
+      role: string;
+      isActive: boolean;
+      emailVerified: boolean;
+    }
+
+    interface School {
+      id: string;
+      centerNumber: string;
+      centerName: string;
+      state: string;
+      lga: string;
+      schoolEmail: string;
+      schoolEmailHash: string;
+      schoolPhone: string;
+      schoolPhoneHash: string;
+      schoolAddress: string;
+      schoolType: string;
+      principalName: string;
+      principalPhone: string;
+      principalPhoneHash: string;
+      examOfficerPhone?: string | null;
+      examOfficerPhoneHash?: string | null;
+      isVerified: boolean;
+      emailVerified: boolean;
+      adminId: string;
+    }
+
+    interface AuditLogDetails {
+      schoolId: string;
+      schoolName: string;
+      centerNumber: string;
+      registrationDate: string;
+      isNewAdmin: boolean;
+      adminVerified: boolean;
+    }
+
     const result = await prisma.$transaction(async (tx) => {
-      let finalAdminUser;
+      let finalAdminUser: AdminUser;
 
       if (isNewAdmin) {
-        // Create new admin
-        console.log("👨‍💼 Creating new admin in database...");
         finalAdminUser = await tx.adminUser.create({
           data: {
             name: protectedAdminName!.encrypted,
@@ -312,21 +361,15 @@ export async function POST(request: NextRequest) {
             emailVerified: false,
           },
         });
-        console.log("✅ New admin created:", finalAdminUser.id);
       } else {
-        // Update existing admin password
-        console.log("🔄 Updating existing admin password...");
         finalAdminUser = await tx.adminUser.update({
           where: { id: adminUser!.id },
           data: {
             password: protectedAdminPassword.encrypted,
           },
         });
-        console.log("✅ Existing admin password updated");
       }
 
-      // Create school with admin reference
-      console.log("🏫 Creating school in database...");
       const school = await tx.school.create({
         data: {
           centerNumber: body.centerNumber,
@@ -349,10 +392,7 @@ export async function POST(request: NextRequest) {
           adminId: finalAdminUser.id,
         },
       });
-      console.log("✅ School created:", school.id);
 
-      // Create audit log
-      console.log("📝 Creating audit log...");
       await tx.adminAuditLog.create({
         data: {
           adminUserId: finalAdminUser.id,
@@ -364,12 +404,11 @@ export async function POST(request: NextRequest) {
             registrationDate: new Date().toISOString(),
             isNewAdmin: isNewAdmin,
             adminVerified: !isNewAdmin,
-          },
+          } as AuditLogDetails,
           ipAddress: request.headers.get("x-forwarded-for") || "unknown",
           userAgent: request.headers.get("user-agent") || "unknown",
         },
       });
-      console.log("✅ Audit log created");
 
       return { school, adminUser: finalAdminUser };
     });

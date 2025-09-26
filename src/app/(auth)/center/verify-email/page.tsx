@@ -1,17 +1,16 @@
-// File: src/app/center/verify-email/page.tsx
-
+// src/app/center/verify-email/VerifyCenterEmailPage.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { JWTUtils } from "@/lib/utils/jwt";
+import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 export default function VerifyCenterEmailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [status, setStatus] = useState<"loading" | "success" | "error">(
+    "loading"
+  );
   const [message, setMessage] = useState("Verifying your school email...");
 
   useEffect(() => {
@@ -20,33 +19,17 @@ export default function VerifyCenterEmailPage() {
         const token = searchParams.get("token");
         const schoolId = searchParams.get("schoolId");
 
-        // Check for required parameters
         if (!token || !schoolId) {
           setStatus("error");
           setMessage("Invalid verification link. Missing token or school ID.");
           return;
         }
 
-        // Verify the token
-        const tokenData = await JWTUtils.verifyEmailToken(token);
-
-        // Verify that the schoolId in the token matches the one in the URL
-        if (tokenData.entityId !== schoolId) {
-          setStatus("error");
-          setMessage("Invalid verification link. School ID mismatch.");
-          return;
-        }
-
-        // Make API call to update the school's email verification status
+        // Make API call to backend route (no need to run JWTUtils here on the client)
         const response = await fetch("/api/center/verify-email", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token,
-            schoolId,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, schoolId }),
         });
 
         const data = await response.json();
@@ -56,7 +39,9 @@ export default function VerifyCenterEmailPage() {
           setMessage("Your school email has been successfully verified!");
         } else {
           setStatus("error");
-          setMessage(data.message || "Email verification failed. Please try again.");
+          setMessage(
+            data.message || "Email verification failed. Please try again."
+          );
         }
       } catch (error) {
         console.error("Email verification error:", error);
@@ -73,12 +58,10 @@ export default function VerifyCenterEmailPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    // Redirect after 5 seconds
     if (status !== "loading") {
       const timer = setTimeout(() => {
         router.push("/login");
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [status, router]);
@@ -95,9 +78,7 @@ export default function VerifyCenterEmailPage() {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             School Email Verification
           </h2>
-          <p className="text-lg text-foreground/70 mb-8">
-            {message}
-          </p>
+          <p className="text-lg text-foreground/70 mb-8">{message}</p>
         </div>
 
         <div className="bg-card rounded-xl shadow-lg p-6">
@@ -105,7 +86,9 @@ export default function VerifyCenterEmailPage() {
             {status === "loading" && (
               <div className="flex flex-col items-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-                <p className="text-foreground/70">Please wait while we verify your email...</p>
+                <p className="text-foreground/70">
+                  Please wait while we verify your email...
+                </p>
               </div>
             )}
 
@@ -131,9 +114,7 @@ export default function VerifyCenterEmailPage() {
                 <p className="text-red-600 font-medium text-center mb-4">
                   Verification failed
                 </p>
-                <p className="text-foreground/70 text-center mb-6">
-                  {message}
-                </p>
+                <p className="text-foreground/70 text-center mb-6">{message}</p>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 w-full">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
@@ -145,7 +126,8 @@ export default function VerifyCenterEmailPage() {
                       </h3>
                       <div className="mt-2 text-sm text-amber-700">
                         <p>
-                          If you continue to have issues, please contact our support team at{" "}
+                          If you continue to have issues, please contact our
+                          support team at{" "}
                           <a
                             href="mailto:support@cecokigwe.org"
                             className="text-primary hover:underline"
