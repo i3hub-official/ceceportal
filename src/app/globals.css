@@ -44,10 +44,8 @@
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   /* Font Families */
   --font-sans:
@@ -186,10 +184,8 @@
   /* Shadows - Dark Mode */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
 
   /* Primary color with opacity variants for dark mode */
   --primary-90: rgba(34, 197, 94, 0.9);
@@ -350,27 +346,6 @@
     @apply text-sm text-muted-foreground mt-1;
   }
 
-  /* Fix placeholder color in dark mode */
-  .dark .form-input::placeholder {
-    color: var(--input-placeholder);
-  }
-
-  /* Fix password toggle button visibility in dark mode */
-  .input-group button {
-    z-index: 10;
-  }
-
-  .dark .input-group button {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 0.25rem;
-    padding: 0.25rem;
-  }
-
-  /* Ensure password input has enough padding for the toggle button */
-  .form-input.pr-10 {
-    padding-right: 2.5rem !important;
-  }
-
   /* Button Components */
   .btn {
     @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50;
@@ -454,7 +429,7 @@
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.5rem center;
     background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
+    background-size: 1.5em;
     appearance: none;
     min-height: 48px; /* Ensure select has proper height */
   }
@@ -514,6 +489,7 @@
   .form-input.pr-10 {
     padding-right: 3rem !important; /* Increased right padding */
   }
+
   /* Navigation Components */
   .nav {
     @apply bg-card border-b border-border h-[73px]; /* Fixed: Using actual nav height value */
@@ -664,6 +640,43 @@
 
   .grid-auto-fill {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+/* ================================
+   ANIMATIONS & KEYFRAMES
+   ================================ */
+
+@keyframes loading-dots {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

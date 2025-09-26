@@ -43,9 +43,9 @@ export default function RootLayout({
       >
         <HeaderProvider>
           <AppHeader /> {/* Add your header component here */}
-          <main className="pt-header min-h-screen">
+          <main className="pt-[73px] min-h-screen">
             {" "}
-            {/* Use pt-header instead of pt-15 */}
+            {/* Use the actual nav height value from CSS */}
             {children}
           </main>
           {/* <Footer /> */}
