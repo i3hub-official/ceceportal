@@ -15,13 +15,14 @@ datasource db {
 }
 
 model AdminAuditLog {
-  id          String   @id @default(cuid())
-  adminUserId String
-  action      String // e.g., "LOGIN", "CREATED_CANDIDATE", "UPDATED_SCHOOL"
-  details     Json? // Additional action details
-  performedAt DateTime @default(now())
-  ipAddress   String?
-  userAgent   String?
+  id               String   @id @default(cuid())
+  adminUserId      String
+  action           String // e.g., "LOGIN", "CREATED_CANDIDATE", "UPDATED_SCHOOL"
+  details          Json? // Additional action details
+  performedAt      DateTime @default(now())
+  ipAddress        String?
+  userAgent        String?
+  processingTimeMs Int? // Time taken to process the action
 
   // Relations
   adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
