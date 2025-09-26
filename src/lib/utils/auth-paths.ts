@@ -1,4 +1,4 @@
-// File: src/config/auth-paths.ts
+// File: src/lib/utils/auth-paths.ts
 export const PUBLIC_PATHS = [
   "/",
   "/sitemap",
