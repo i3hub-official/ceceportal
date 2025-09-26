@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
 
     // Decrypt sensitive data for schools
     const decryptedSchools = await Promise.all(
-      schools.map(async (school) => ({
+      schools.map(async (school: { id: string; centerName: string }) => ({
         ...school,
         centerName: await unprotectData(school.centerName, "name"),
       }))
@@ -116,7 +116,21 @@ export async function POST(request: NextRequest) {
 
     // Decrypt sensitive data for admin users
     const decryptedAdminUsers = await Promise.all(
-      adminUsers.map(async (admin) => ({
+      adminUsers.map(async (admin: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+        isActive: boolean;
+        emailVerified: boolean;
+        lastLoginAt: Date | null;
+        createdAt: Date;
+        school: {
+          id: string;
+          centerNumber: string;
+          centerName: string;
+        } | null;
+      }) => ({
         id: admin.id,
         name: await unprotectData(admin.name, "name"),
         email: await unprotectData(admin.email, "email"),

@@ -291,7 +291,7 @@ export async function POST(request: NextRequest) {
 
     // Transaction: create school + admin (if new)
     console.log("💾 Starting database transaction...");
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: typeof prisma) => {
       let finalAdminUser;
 
       if (isNewAdmin) {

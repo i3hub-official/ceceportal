@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
 
       // Get the primary admin user for the school
       const primaryAdmin = school.adminUsers.find(
-        (admin) => admin.role === "Admin" || admin.role === "Super_Admin"
+        (admin: { role: string }) => admin.role === "Admin" || admin.role === "Super_Admin"
       );
 
       if (!primaryAdmin) {
