@@ -2,16 +2,41 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { JWTUtils } from "@/lib/utils/jwt";
 import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
-export default function VerifyEmailPage() {
+// Loading component
+function VerificationLoading() {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            Email Verification
+          </h2>
+          <p className="text-lg text-foreground/70 mb-8">
+            Loading verification page...
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main verification component
+function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [status, setStatus] = useState<"loading" | "success" | "error">(
+    "loading"
+  );
   const [message, setMessage] = useState("Verifying your email...");
 
   useEffect(() => {
@@ -56,7 +81,9 @@ export default function VerifyEmailPage() {
           setMessage("Your email has been successfully verified!");
         } else {
           setStatus("error");
-          setMessage(data.message || "Email verification failed. Please try again.");
+          setMessage(
+            data.message || "Email verification failed. Please try again."
+          );
         }
       } catch (error) {
         console.error("Email verification error:", error);
@@ -95,9 +122,7 @@ export default function VerifyEmailPage() {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             Email Verification
           </h2>
-          <p className="text-lg text-foreground/70 mb-8">
-            {message}
-          </p>
+          <p className="text-lg text-foreground/70 mb-8">{message}</p>
         </div>
 
         <div className="bg-card rounded-xl shadow-lg p-6">
@@ -105,7 +130,9 @@ export default function VerifyEmailPage() {
             {status === "loading" && (
               <div className="flex flex-col items-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-                <p className="text-foreground/70">Please wait while we verify your email...</p>
+                <p className="text-foreground/70">
+                  Please wait while we verify your email...
+                </p>
               </div>
             )}
 
@@ -131,9 +158,7 @@ export default function VerifyEmailPage() {
                 <p className="text-red-600 font-medium text-center mb-4">
                   Verification failed
                 </p>
-                <p className="text-foreground/70 text-center mb-6">
-                  {message}
-                </p>
+                <p className="text-foreground/70 text-center mb-6">{message}</p>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 w-full">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
@@ -145,7 +170,8 @@ export default function VerifyEmailPage() {
                       </h3>
                       <div className="mt-2 text-sm text-amber-700">
                         <p>
-                          If you continue to have issues, please contact our support team at{" "}
+                          If you continue to have issues, please contact our
+                          support team at{" "}
                           <a
                             href="mailto:support@cecokigwe.org"
                             className="text-primary hover:underline"
@@ -178,5 +204,14 @@ export default function VerifyEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense wrapper
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<VerificationLoading />}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
