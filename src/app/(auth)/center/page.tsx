@@ -17,6 +17,7 @@ import {
   User,
   Search,
   ClipboardList,
+  BookOpen,
   Loader2,
   Shield,
   AlertCircle,
@@ -1219,25 +1220,29 @@ export default function SchoolRegistrationPage() {
           Back to Home
         </Link>
 
-        <div className="card bg-card/80 backdrop-blur-sm">
-          <div className="card-header bg-gradient-to-r from-primary/5 to-transparent">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              School Registration
-            </h1>
-            <p className="text-muted-foreground text-sm md:text-base">
-              Register your school for the Catholic Education Commission Mock
-              Examinations
-            </p>
+        <div className="card bg-card/80 backdrop-blur-sm border-t-4 border-primary">
+          <div className="card-header">
+            <div className="flex items-center gap-3 mb-4">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                  School Registration
+                </h1>
+                <p className="text-muted-foreground text-sm md:text-base">
+                  Register your school for the Catholic Education Commission
+                  Mock Examinations
+                </p>
+              </div>
+            </div>
 
             {/* Progress indicator */}
-            <div className="mt-6">
+            <div className="mt-2">
               <div className="flex items-center justify-center">
                 {[1, 2, 3, 4].map((i) => (
                   <React.Fragment key={i}>
                     <div
                       className={`relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 ${
                         i < step
-                          ? "bg-green-600 text-white shadow-md scale-105"
+                          ? "bg-primary text-white shadow-md scale-105"
                           : i === step
                             ? "bg-primary text-primary-foreground shadow-md scale-105"
                             : "bg-muted text-muted-foreground"
@@ -1257,7 +1262,7 @@ export default function SchoolRegistrationPage() {
                     {i < 4 && (
                       <div
                         className={`flex-1 h-1 mx-2 md:mx-4 rounded-full transition-all duration-500 ${
-                          i < step ? "bg-green-600" : "bg-muted"
+                          i < step ? "bg-primary" : "bg-muted"
                         }`}
                       ></div>
                     )}
@@ -1304,10 +1309,14 @@ export default function SchoolRegistrationPage() {
 
         {step < 4 && (
           <div className="mt-6 card bg-card/60">
-            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center">
-              <Download className="w-5 h-5 mr-2 text-primary" />
-              Registration Resources
-            </h3>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Download className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground">
+                Registration Resources
+              </h3>
+            </div>
             <div className="grid gap-3 md:grid-cols-2">
               <Link
                 href="#"

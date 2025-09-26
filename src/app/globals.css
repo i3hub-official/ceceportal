@@ -86,6 +86,72 @@
   --primary-30: rgba(16, 185, 129, 0.3);
   --primary-20: rgba(16, 185, 129, 0.2);
   --primary-10: rgba(16, 185, 129, 0.1);
+
+  /* Secondary color with opacity variants */
+  --secondary-90: rgba(6, 182, 212, 0.9);
+  --secondary-80: rgba(6, 182, 212, 0.8);
+  --secondary-70: rgba(6, 182, 212, 0.7);
+  --secondary-60: rgba(6, 182, 212, 0.6);
+  --secondary-50: rgba(6, 182, 212, 0.5);
+  --secondary-40: rgba(6, 182, 212, 0.4);
+  --secondary-30: rgba(6, 182, 212, 0.3);
+  --secondary-20: rgba(6, 182, 212, 0.2);
+  --secondary-10: rgba(6, 182, 212, 0.1);
+
+  /* Accent color with opacity variants */
+  --accent-90: rgba(245, 158, 11, 0.9);
+  --accent-80: rgba(245, 158, 11, 0.8);
+  --accent-70: rgba(245, 158, 11, 0.7);
+  --accent-60: rgba(245, 158, 11, 0.6);
+  --accent-50: rgba(245, 158, 11, 0.5);
+  --accent-40: rgba(245, 158, 11, 0.4);
+  --accent-30: rgba(245, 158, 11, 0.3);
+  --accent-20: rgba(245, 158, 11, 0.2);
+  --accent-10: rgba(245, 158, 11, 0.1);
+
+  /* Success color with opacity variants */
+  --success-90: rgba(16, 185, 129, 0.9);
+  --success-80: rgba(16, 185, 129, 0.8);
+  --success-70: rgba(16, 185, 129, 0.7);
+  --success-60: rgba(16, 185, 129, 0.6);
+  --success-50: rgba(16, 185, 129, 0.5);
+  --success-40: rgba(16, 185, 129, 0.4);
+  --success-30: rgba(16, 185, 129, 0.3);
+  --success-20: rgba(16, 185, 129, 0.2);
+  --success-10: rgba(16, 185, 129, 0.1);
+
+  /* Warning color with opacity variants */
+  --warning-90: rgba(245, 158, 11, 0.9);
+  --warning-80: rgba(245, 158, 11, 0.8);
+  --warning-70: rgba(245, 158, 11, 0.7);
+  --warning-60: rgba(245, 158, 11, 0.6);
+  --warning-50: rgba(245, 158, 11, 0.5);
+  --warning-40: rgba(245, 158, 11, 0.4);
+  --warning-30: rgba(245, 158, 11, 0.3);
+  --warning-20: rgba(245, 158, 11, 0.2);
+  --warning-10: rgba(245, 158, 11, 0.1);
+
+  /* Error color with opacity variants */
+  --error-90: rgba(239, 68, 68, 0.9);
+  --error-80: rgba(239, 68, 68, 0.8);
+  --error-70: rgba(239, 68, 68, 0.7);
+  --error-60: rgba(239, 68, 68, 0.6);
+  --error-50: rgba(239, 68, 68, 0.5);
+  --error-40: rgba(239, 68, 68, 0.4);
+  --error-30: rgba(239, 68, 68, 0.3);
+  --error-20: rgba(239, 68, 68, 0.2);
+  --error-10: rgba(239, 68, 68, 0.1);
+
+  /* Info color with opacity variants */
+  --info-90: rgba(6, 182, 212, 0.9);
+  --info-80: rgba(6, 182, 212, 0.8);
+  --info-70: rgba(6, 182, 212, 0.7);
+  --info-60: rgba(6, 182, 212, 0.6);
+  --info-50: rgba(6, 182, 212, 0.5);
+  --info-40: rgba(6, 182, 212, 0.4);
+  --info-30: rgba(6, 182, 212, 0.3);
+  --info-20: rgba(6, 182, 212, 0.2);
+  --info-10: rgba(6, 182, 212, 0.1);
 }
 
 /* ================================
@@ -124,6 +190,8 @@
     0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
   --shadow-xl:
     0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+
+  /* Primary color with opacity variants for dark mode */
   --primary-90: rgba(34, 197, 94, 0.9);
   --primary-80: rgba(34, 197, 94, 0.8);
   --primary-70: rgba(34, 197, 94, 0.7);
@@ -133,6 +201,72 @@
   --primary-30: rgba(34, 197, 94, 0.3);
   --primary-20: rgba(34, 197, 94, 0.2);
   --primary-10: rgba(34, 197, 94, 0.1);
+
+  /* Secondary color with opacity variants for dark mode */
+  --secondary-90: rgba(6, 182, 212, 0.9);
+  --secondary-80: rgba(6, 182, 212, 0.8);
+  --secondary-70: rgba(6, 182, 212, 0.7);
+  --secondary-60: rgba(6, 182, 212, 0.6);
+  --secondary-50: rgba(6, 182, 212, 0.5);
+  --secondary-40: rgba(6, 182, 212, 0.4);
+  --secondary-30: rgba(6, 182, 212, 0.3);
+  --secondary-20: rgba(6, 182, 212, 0.2);
+  --secondary-10: rgba(6, 182, 212, 0.1);
+
+  /* Accent color with opacity variants for dark mode */
+  --accent-90: rgba(245, 158, 11, 0.9);
+  --accent-80: rgba(245, 158, 11, 0.8);
+  --accent-70: rgba(245, 158, 11, 0.7);
+  --accent-60: rgba(245, 158, 11, 0.6);
+  --accent-50: rgba(245, 158, 11, 0.5);
+  --accent-40: rgba(245, 158, 11, 0.4);
+  --accent-30: rgba(245, 158, 11, 0.3);
+  --accent-20: rgba(245, 158, 11, 0.2);
+  --accent-10: rgba(245, 158, 11, 0.1);
+
+  /* Success color with opacity variants for dark mode */
+  --success-90: rgba(34, 197, 94, 0.9);
+  --success-80: rgba(34, 197, 94, 0.8);
+  --success-70: rgba(34, 197, 94, 0.7);
+  --success-60: rgba(34, 197, 94, 0.6);
+  --success-50: rgba(34, 197, 94, 0.5);
+  --success-40: rgba(34, 197, 94, 0.4);
+  --success-30: rgba(34, 197, 94, 0.3);
+  --success-20: rgba(34, 197, 94, 0.2);
+  --success-10: rgba(34, 197, 94, 0.1);
+
+  /* Warning color with opacity variants for dark mode */
+  --warning-90: rgba(234, 179, 8, 0.9);
+  --warning-80: rgba(234, 179, 8, 0.8);
+  --warning-70: rgba(234, 179, 8, 0.7);
+  --warning-60: rgba(234, 179, 8, 0.6);
+  --warning-50: rgba(234, 179, 8, 0.5);
+  --warning-40: rgba(234, 179, 8, 0.4);
+  --warning-30: rgba(234, 179, 8, 0.3);
+  --warning-20: rgba(234, 179, 8, 0.2);
+  --warning-10: rgba(234, 179, 8, 0.1);
+
+  /* Error color with opacity variants for dark mode */
+  --error-90: rgba(239, 68, 68, 0.9);
+  --error-80: rgba(239, 68, 68, 0.8);
+  --error-70: rgba(239, 68, 68, 0.7);
+  --error-60: rgba(239, 68, 68, 0.6);
+  --error-50: rgba(239, 68, 68, 0.5);
+  --error-40: rgba(239, 68, 68, 0.4);
+  --error-30: rgba(239, 68, 68, 0.3);
+  --error-20: rgba(239, 68, 68, 0.2);
+  --error-10: rgba(239, 68, 68, 0.1);
+
+  /* Info color with opacity variants for dark mode */
+  --info-90: rgba(14, 165, 233, 0.9);
+  --info-80: rgba(14, 165, 233, 0.8);
+  --info-70: rgba(14, 165, 233, 0.7);
+  --info-60: rgba(14, 165, 233, 0.6);
+  --info-50: rgba(14, 165, 233, 0.5);
+  --info-40: rgba(14, 165, 233, 0.4);
+  --info-30: rgba(14, 165, 233, 0.3);
+  --info-20: rgba(14, 165, 233, 0.2);
+  --info-10: rgba(14, 165, 233, 0.1);
 }
 
 /* ================================
@@ -216,41 +350,71 @@
     @apply text-sm text-muted-foreground mt-1;
   }
 
+  /* Fix placeholder color in dark mode */
+  .dark .form-input::placeholder {
+    color: var(--input-placeholder);
+  }
+
+  /* Fix password toggle button visibility in dark mode */
+  .input-group button {
+    z-index: 10;
+  }
+
+  .dark .input-group button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  /* Ensure password input has enough padding for the toggle button */
+  .form-input.pr-10 {
+    padding-right: 2.5rem !important;
+  }
+
   /* Button Components */
   .btn {
     @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50;
+    min-height: 44px; /* Increased minimum height for better accessibility */
+    padding: 0.75rem 1rem; /* Increased padding for larger buttons */
   }
 
   .btn-sm {
-    @apply h-8 px-3 text-xs;
+    @apply h-10 px-3 text-xs;
+    min-height: 40px; /* Increased height for small buttons */
   }
 
   .btn-md {
-    @apply h-10 px-4;
+    @apply h-12 px-4; /* Increased height for medium buttons */
+    min-height: 48px;
   }
 
   .btn-lg {
-    @apply h-12 px-6;
+    @apply h-14 px-6; /* Increased height for large buttons */
+    min-height: 56px;
   }
 
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary/90;
+    @apply bg-primary text-white hover:bg-primary-90;
   }
 
   .btn-secondary {
-    @apply bg-secondary text-white hover:bg-secondary/90;
+    @apply bg-secondary text-white hover:bg-secondary-90;
   }
 
   .btn-outline {
     @apply border border-border bg-transparent text-foreground hover:bg-card;
+    min-height: 44px; /* Ensure outline buttons also have proper height */
+    padding: 0.75rem 1rem; /* Ensure outline buttons have proper padding */
   }
 
   .btn-ghost {
     @apply bg-transparent text-foreground hover:bg-card;
+    min-height: 44px; /* Ensure ghost buttons also have proper height */
+    padding: 0.75rem 1rem; /* Ensure ghost buttons have proper padding */
   }
 
   .btn-danger {
-    @apply bg-error text-white hover:bg-error/90;
+    @apply bg-error text-white hover:bg-error-90;
   }
 
   /* Form Components */
@@ -263,12 +427,26 @@
   }
 
   .form-input {
-    @apply flex h-10 w-full rounded-lg border border-input-border bg-input-bg px-3 py-2 text-sm text-input-text placeholder:text-input-placeholder focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background focus:border-primary disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-12 w-full rounded-lg border border-input-border bg-input-bg px-3 py-3 text-base text-input-text placeholder:text-input-placeholder focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background focus:border-primary disabled:cursor-not-allowed disabled:opacity-50;
     transition: all var(--transition-normal);
+    min-height: 48px; /* Increased minimum height */
+  }
+
+  /* Fix placeholder color in dark mode */
+  .dark .form-input::placeholder {
+    color: var(--input-placeholder);
+  }
+
+  /* Explicit dark mode styles for inputs */
+  .dark .form-input {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: #d1d5db; /* Light gray text color for dark mode */
   }
 
   .form-textarea {
-    @apply form-input min-h-[80px] resize-none;
+    @apply form-input min-h-[120px] resize-none;
+    min-height: 120px; /* Increased minimum height for textarea */
   }
 
   .form-select {
@@ -278,14 +456,21 @@
     background-repeat: no-repeat;
     background-size: 1.5em 1.5em;
     appearance: none;
+    min-height: 48px; /* Ensure select has proper height */
+  }
+
+  /* Explicit dark mode styles for select */
+  .dark .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a1a1aa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    color: #d1d5db; /* Light gray text color for dark mode */
   }
 
   .form-checkbox {
-    @apply h-4 w-4 rounded border-input-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    @apply h-5 w-5 rounded border-input-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2;
   }
 
   .form-radio {
-    @apply h-4 w-4 border-input-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    @apply h-5 w-5 border-input-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2;
   }
 
   .form-error {
@@ -302,13 +487,33 @@
   }
 
   .input-icon-left {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none;
+    @apply absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none;
   }
 
   .input-group .form-input {
-    @apply pl-10;
+    @apply pl-12; /* Increased left padding to accommodate larger icon */
   }
 
+  /* Dark mode icon color */
+  .dark .input-icon-left {
+    color: var(--muted-foreground);
+  }
+
+  /* Fix password toggle button visibility in dark mode */
+  .input-group button {
+    z-index: 10;
+  }
+
+  .dark .input-group button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  /* Ensure password input has enough padding for the toggle button */
+  .form-input.pr-10 {
+    padding-right: 3rem !important; /* Increased right padding */
+  }
   /* Navigation Components */
   .nav {
     @apply bg-card border-b border-border h-[73px]; /* Fixed: Using actual nav height value */
@@ -364,19 +569,19 @@
   }
 
   .alert-primary {
-    @apply border-primary/20 bg-primary/10 text-primary;
+    @apply border-primary-20 bg-primary-10 text-primary;
   }
 
   .alert-success {
-    @apply border-success/20 bg-success/10 text-success;
+    @apply border-success-20 bg-success-10 text-success;
   }
 
   .alert-warning {
-    @apply border-warning/20 bg-warning/10 text-warning;
+    @apply border-warning-20 bg-warning-10 text-warning;
   }
 
   .alert-error {
-    @apply border-error/20 bg-error/10 text-error;
+    @apply border-error-20 bg-error-10 text-error;
   }
 
   /* Table Components */

@@ -167,23 +167,23 @@ export default function LoginPage() {
           <h2 className="mt-2 text-3xl font-bold text-center text-foreground">
             School Login
           </h2>
-          <p className="mt-2 text-sm text-center text-foreground/70">
+          <p className="mt-2 text-sm text-center text-muted-foreground">
             Sign in to your CEC Okigwe school account
           </p>
         </div>
 
-        <div className="bg-card rounded-xl shadow-lg p-6">
+        <div className="card">
           {verificationRequired && (
-            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="mb-6 alert alert-warning">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <AlertCircle className="h-5 w-5 text-amber-400" />
+                  <AlertCircle className="h-5 w-5 text-warning-foreground" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-amber-800">
+                  <h3 className="text-sm font-medium text-warning-foreground">
                     Email Verification Required
                   </h3>
-                  <div className="mt-2 text-sm text-amber-700">
+                  <div className="mt-2 text-sm text-warning-foreground/80">
                     <p>
                       Your account has been created, but you need to verify your
                       email address before logging in.
@@ -193,7 +193,7 @@ export default function LoginPage() {
                         <button
                           type="button"
                           onClick={() => handleResendVerification("school")}
-                          className="flex items-center text-sm font-medium text-amber-700 hover:text-amber-600"
+                          className="flex items-center text-sm font-medium text-warning-foreground hover:text-warning-foreground/80"
                         >
                           <RefreshCw className="w-4 h-4 mr-1" />
                           Resend school verification email
@@ -203,7 +203,7 @@ export default function LoginPage() {
                         <button
                           type="button"
                           onClick={() => handleResendVerification("admin")}
-                          className="flex items-center text-sm font-medium text-amber-700 hover:text-amber-600"
+                          className="flex items-center text-sm font-medium text-warning-foreground hover:text-warning-foreground/80"
                         >
                           <RefreshCw className="w-4 h-4 mr-1" />
                           Resend admin verification email
@@ -217,16 +217,16 @@ export default function LoginPage() {
           )}
 
           {loginError && (
-            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="mb-6 alert alert-error">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <AlertCircle className="h-5 w-5 text-red-400" />
+                  <AlertCircle className="h-5 w-5 text-error-foreground" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">
+                  <h3 className="text-sm font-medium text-error-foreground">
                     Login failed
                   </h3>
-                  <div className="mt-2 text-sm text-red-700">
+                  <div className="mt-2 text-sm text-error-foreground/80">
                     <p>{loginError}</p>
                   </div>
                 </div>
@@ -235,18 +235,15 @@ export default function LoginPage() {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="login"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+            <div className="form-group">
+              <label htmlFor="login" className="form-label">
                 School Email or Phone Number
               </label>
-              <div className="relative">
+              <div className="input-group">
                 {getLoginType() === "email" ? (
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Mail className="input-icon-left" />
                 ) : (
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Phone className="input-icon-left" />
                 )}
                 <input
                   id="login"
@@ -254,40 +251,31 @@ export default function LoginPage() {
                   type="text"
                   value={loginData.login}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                    errors.login ? "border-red-500" : "border-border"
-                  }`}
+                  className={`form-input ${errors.login ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="Email address or phone number"
                 />
               </div>
-              {errors.login && (
-                <p className="mt-1 text-sm text-red-500">{errors.login}</p>
-              )}
+              {errors.login && <p className="form-error">{errors.login}</p>}
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
                 Password
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <div className="input-group">
+                <Lock className="input-icon-left" />
                 <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
                   value={loginData.password}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                    errors.password ? "border-red-500" : "border-border"
-                  }`}
+                  className={`form-input pr-12 ${errors.password ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground/30 hover:text-foreground/60"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 text-muted-foreground hover:text-foreground focus:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -298,7 +286,7 @@ export default function LoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p className="form-error">{errors.password}</p>
               )}
             </div>
 
@@ -308,11 +296,11 @@ export default function LoginPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
+                  className="form-checkbox"
                 />
                 <label
                   htmlFor="remember-me"
-                  className="ml-2 block text-sm text-foreground/70"
+                  className="ml-2 block text-sm text-muted-foreground"
                 >
                   Remember me
                 </label>
@@ -321,7 +309,7 @@ export default function LoginPage() {
               <div className="text-sm">
                 <Link
                   href="/forgot-password"
-                  className="font-medium text-primary hover:text-primary/90"
+                  className="font-medium text-primary hover:text-primary/80"
                 >
                   Forgot password?
                 </Link>
@@ -332,12 +320,12 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="btn btn-primary w-full"
               >
                 {isSubmitting ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    loging in...
+                    logging in...
                   </>
                 ) : (
                   "Sign in"
@@ -352,7 +340,7 @@ export default function LoginPage() {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-foreground/70">
+                <span className="px-2 bg-card text-muted-foreground">
                   New to CEC Okigwe?
                 </span>
               </div>
@@ -361,7 +349,7 @@ export default function LoginPage() {
             <div className="mt-4 text-center">
               <Link
                 href="center"
-                className="inline-flex items-center px-4 py-2 border border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition"
+                className="btn btn-outline inline-flex items-center"
               >
                 <School className="w-5 h-5 mr-2" />
                 Create school account
@@ -370,7 +358,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="text-center text-sm text-foreground/60">
+        <div className="text-center text-sm text-muted-foreground">
           <p>
             Need help? Contact the CEC support team at{" "}
             <a
