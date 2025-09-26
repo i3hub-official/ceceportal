@@ -291,6 +291,7 @@ export async function POST(request: NextRequest) {
 
     // Transaction: create school + admin (if new)
     console.log("💾 Starting database transaction...");
+
     interface ProtectedData {
       encrypted: string;
       searchHash?: string | null;
@@ -331,15 +332,6 @@ export async function POST(request: NextRequest) {
       isVerified: boolean;
       emailVerified: boolean;
       adminId: string;
-    }
-
-    interface AuditLogDetails {
-      schoolId: string;
-      schoolName: string;
-      centerNumber: string;
-      registrationDate: string;
-      isNewAdmin: boolean;
-      adminVerified: boolean;
     }
 
     const result = await prisma.$transaction(async (tx) => {
@@ -393,18 +385,21 @@ export async function POST(request: NextRequest) {
         },
       });
 
+      // Create audit log details as plain object
+      const auditDetails = {
+        schoolId: school.id,
+        schoolName: school.centerName,
+        centerNumber: school.centerNumber,
+        registrationDate: new Date().toISOString(),
+        isNewAdmin: isNewAdmin,
+        adminVerified: !isNewAdmin,
+      };
+
       await tx.adminAuditLog.create({
         data: {
           adminUserId: finalAdminUser.id,
           action: "SCHOOL_REGISTRATION",
-          details: {
-            schoolId: school.id,
-            schoolName: school.centerName,
-            centerNumber: school.centerNumber,
-            registrationDate: new Date().toISOString(),
-            isNewAdmin: isNewAdmin,
-            adminVerified: !isNewAdmin,
-          } as AuditLogDetails,
+          details: auditDetails,
           ipAddress: request.headers.get("x-forwarded-for") || "unknown",
           userAgent: request.headers.get("user-agent") || "unknown",
         },
