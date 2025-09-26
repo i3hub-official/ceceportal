@@ -18,9 +18,9 @@ import {
   Search,
   ClipboardList,
   Loader2,
-    Shield,
+  Shield,
   AlertCircle,
-    CreditCard,
+  CreditCard,
 } from "lucide-react";
 
 interface CenterResponse {
@@ -64,7 +64,9 @@ export default function SchoolRegistrationPage() {
   const [ninExists, setNinExists] = useState(false);
   const [isVerifyingNin, setIsVerifyingNin] = useState(false);
   const [ninVerified, setNinVerified] = useState(false);
-    const [ninData, setNinData] = useState<NINLookupResponse["data"] | null>(null);
+  const [ninData, setNinData] = useState<NINLookupResponse["data"] | null>(
+    null
+  );
 
   const [formData, setFormData] = useState({
     // Step 1: Center number verification
@@ -154,26 +156,18 @@ export default function SchoolRegistrationPage() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Accept: "application/json",
           },
         }
       );
 
-      const data: CenterResponse = await response.json();
+      const data = await response.json();
 
       if (response.ok && data.success) {
-        if (data.data?.isRegistered) {
-          // Center is already registered in our database
-          setErrors({
-            centerNumber:
-              "This center is already registered. If you believe this is an error, please contact the Catholic Education Commission for assistance.",
-          });
-          return;
-        }
-
-        // Center not registered, proceed with pre-filling form data
+        // Center verified and available for registration
         const centerData = data.data;
 
-        // Pre-fill the form with school data from API if centerData is defined
+        // Pre-fill the form with center data from API
         if (centerData) {
           setFormData((prev) => ({
             ...prev,
@@ -181,15 +175,38 @@ export default function SchoolRegistrationPage() {
             centerName: centerData.name,
             state: centerData.state,
             lga: centerData.lga,
-            schoolAddress: centerData.address,
+            schoolAddress: centerData.address || "",
           }));
         }
 
         setIsVerified(true);
         setStep(2);
       } else {
-        const errorMessage =
-          data.message || "Invalid center number. Please check and try again.";
+        // Handle different error scenarios
+        let errorMessage = "Invalid center number. Please check and try again.";
+
+        if (response.status === 409) {
+          // Center already registered
+          errorMessage =
+            data.message || "This center is already registered in the system.";
+        } else if (response.status === 404) {
+          // Center not found
+          errorMessage =
+            data.message ||
+            "Center number not found in the Catholic Education Commission database.";
+        } else if (response.status === 403) {
+          // Center inactive
+          errorMessage = data.message || "This center is currently inactive.";
+        } else if (response.status >= 500) {
+          // Server errors
+          errorMessage =
+            data.message ||
+            "Verification service is temporarily unavailable. Please try again later.";
+        } else {
+          // Other errors
+          errorMessage = data.message || errorMessage;
+        }
+
         setErrors({
           centerNumber: errorMessage,
         });
@@ -416,7 +433,7 @@ export default function SchoolRegistrationPage() {
       case 1:
         return (
           <div className="space-y-6">
-            <div className="bg-card dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+            <div className="card">
               <div className="flex flex-col xs:flex-row xs:items-start gap-4">
                 <div className="flex-shrink-0 w-10 h-10 xs:w-12 xs:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                   <ClipboardList className="h-5 w-5 xs:h-6 xs:w-6 text-primary" />
@@ -434,29 +451,23 @@ export default function SchoolRegistrationPage() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-foreground mb-2">
-                Center Number *
-              </label>
-              <div className="relative">
-                <School className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            <div className="form-group">
+              <label className="form-label">Center Number *</label>
+              <div className="input-group">
+                <School className="input-icon-left" />
                 <input
                   type="text"
                   name="centerNumber"
                   value={formData.centerNumber}
                   onChange={handleInputChange}
                   disabled={isVerifying}
-                  className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-base ${
-                    errors.centerNumber
-                      ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                      : "border-input hover:border-primary/30"
-                  }`}
+                  className={`form-input ${errors.centerNumber ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="Enter your center number"
                 />
               </div>
               {errors.centerNumber && (
-                <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 mt-2">
-                  <p className="text-sm text-destructive flex items-start">
+                <div className="alert alert-error mt-2">
+                  <p className="flex items-start">
                     <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                     <span>{errors.centerNumber}</span>
                   </p>
@@ -467,7 +478,7 @@ export default function SchoolRegistrationPage() {
             <button
               onClick={verifyCenterNumber}
               disabled={isVerifying || !formData.centerNumber}
-              className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:shadow-md hover:scale-[1.02] transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-base"
+              className="btn btn-primary w-full"
             >
               {isVerifying ? (
                 <>
@@ -488,7 +499,7 @@ export default function SchoolRegistrationPage() {
         return (
           <div className="space-y-6">
             {/* Center Verification Success */}
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50 border border-green-200 dark:border-green-800 rounded-xl p-4 md:p-6">
+            <div className="card bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                   <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -527,113 +538,89 @@ export default function SchoolRegistrationPage() {
               </h4>
 
               {/* School Type */}
-              <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">
-                  School Type *
-                </label>
+              <div className="form-group">
+                <label className="form-label">School Type *</label>
                 <select
                   name="schoolType"
                   value={formData.schoolType}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 text-base ${
-                    errors.schoolType
-                      ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                      : "border-input hover:border-primary/30"
-                  }`}
+                  className={`form-select ${errors.schoolType ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                 >
                   <option value="">Select school type</option>
                   <option value="Secondary">Senior Secondary School</option>
                   <option value="Seminary">Seminary School</option>
                 </select>
                 {errors.schoolType && (
-                  <p className="text-sm text-destructive flex items-center mt-1">
+                  <p className="form-error flex items-center mt-1">
                     <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                     {errors.schoolType}
                   </p>
                 )}
               </div>
 
-              {/* School Email - No Verification Button */}
-              <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">
-                  School Email *
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              {/* School Email */}
+              <div className="form-group">
+                <label className="form-label">School Email *</label>
+                <div className="input-group">
+                  <Mail className="input-icon-left" />
                   <input
                     type="email"
                     name="schoolEmail"
                     value={formData.schoolEmail}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                      errors.schoolEmail
-                        ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                        : "border-input hover:border-primary/30"
-                    }`}
+                    className={`form-input ${errors.schoolEmail ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                     placeholder="school@example.com"
                   />
                 </div>
                 {errors.schoolEmail && (
-                  <p className="text-sm text-destructive flex items-center mt-1">
+                  <p className="form-error flex items-center mt-1">
                     <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                     {errors.schoolEmail}
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="form-helper">
                   Email verification will be required after registration
                 </p>
               </div>
 
               {/* Other School Fields */}
               <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    School Phone *
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <div className="form-group">
+                  <label className="form-label">School Phone *</label>
+                  <div className="input-group">
+                    <Phone className="input-icon-left" />
                     <input
                       type="tel"
                       name="schoolPhone"
                       value={formData.schoolPhone}
                       onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                        errors.schoolPhone
-                          ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                          : "border-input hover:border-primary/30"
-                      }`}
+                      className={`form-input ${errors.schoolPhone ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                       placeholder="+234 800 123 4567"
                     />
                   </div>
                   {errors.schoolPhone && (
-                    <p className="text-sm text-destructive flex items-center mt-1">
+                    <p className="form-error flex items-center mt-1">
                       <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                       {errors.schoolPhone}
                     </p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    School Address *
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 text-muted-foreground w-5 h-5" />
+                <div className="form-group">
+                  <label className="form-label">School Address *</label>
+                  <div className="input-group">
+                    <MapPin className="input-icon-left" />
                     <textarea
                       name="schoolAddress"
                       value={formData.schoolAddress}
                       onChange={handleInputChange}
                       rows={3}
-                      className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 resize-none ${
-                        errors.schoolAddress
-                          ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                          : "border-input hover:border-primary/30"
-                      }`}
+                      className={`form-textarea ${errors.schoolAddress ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                       placeholder="Enter complete school address"
                     />
                   </div>
                   {errors.schoolAddress && (
-                    <p className="text-sm text-destructive flex items-center mt-1">
+                    <p className="form-error flex items-center mt-1">
                       <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                       {errors.schoolAddress}
                     </p>
@@ -643,54 +630,42 @@ export default function SchoolRegistrationPage() {
 
               {/* Principal Information */}
               <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    Principal&apos;s Name *
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <div className="form-group">
+                  <label className="form-label">Principal&apos;s Name *</label>
+                  <div className="input-group">
+                    <User className="input-icon-left" />
                     <input
                       type="text"
                       name="principalName"
                       value={formData.principalName}
                       onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                        errors.principalName
-                          ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                          : "border-input hover:border-primary/30"
-                      }`}
+                      className={`form-input ${errors.principalName ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                       placeholder="Enter principal's full name"
                     />
                   </div>
                   {errors.principalName && (
-                    <p className="text-sm text-destructive flex items-center mt-1">
+                    <p className="form-error flex items-center mt-1">
                       <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                       {errors.principalName}
                     </p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    Principal&apos;s Phone *
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <div className="form-group">
+                  <label className="form-label">Principal&apos;s Phone *</label>
+                  <div className="input-group">
+                    <Phone className="input-icon-left" />
                     <input
                       type="tel"
                       name="principalPhone"
                       value={formData.principalPhone}
                       onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                        errors.principalPhone
-                          ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                          : "border-input hover:border-primary/30"
-                      }`}
+                      className={`form-input ${errors.principalPhone ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                       placeholder="+234 800 123 4567"
                     />
                   </div>
                   {errors.principalPhone && (
-                    <p className="text-sm text-destructive flex items-center mt-1">
+                    <p className="form-error flex items-center mt-1">
                       <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                       {errors.principalPhone}
                     </p>
@@ -706,7 +681,7 @@ export default function SchoolRegistrationPage() {
                   setStep(1);
                   setIsVerified(false);
                 }}
-                className="px-6 py-3 border border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-all duration-200"
+                className="btn btn-outline"
               >
                 Back to Verification
               </button>
@@ -715,7 +690,7 @@ export default function SchoolRegistrationPage() {
                 onClick={() => {
                   if (validateStep2()) setStep(3);
                 }}
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-md hover:scale-[1.02] transition-all duration-200"
+                className="btn btn-primary"
               >
                 Continue to Admin Setup
               </button>
@@ -741,7 +716,7 @@ export default function SchoolRegistrationPage() {
 
             {/* NIN Verification Section */}
             {!ninVerified && (
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="card bg-green-50 dark:bg-green-950/30">
                 <h4 className="font-semibold text-green-900 dark:text-green-100 mb-3 flex items-center">
                   <CreditCard className="w-5 h-5 mr-2" />
                   Administrator NIN Verification
@@ -751,20 +726,20 @@ export default function SchoolRegistrationPage() {
                   (NIN) to check if they already have an account.
                 </p>
 
-                <div>
+                <div className="form-group">
                   <label className="block text-sm font-medium text-green-900 dark:text-green-100 mb-2">
                     National Identification Number (NIN) *
                   </label>
                   <div className="flex gap-2">
-                    <div className="flex-1 relative">
-                      <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-600 w-5 h-5" />
+                    <div className="flex-1 input-group">
+                      <CreditCard className="input-icon-left text-green-600" />
                       <input
                         type="text"
                         name="adminNin"
                         value={formData.adminNin}
                         onChange={handleInputChange}
                         maxLength={11}
-                        className="w-full pl-10 pr-4 py-3 border border-green-200 dark:border-green-700 rounded-lg focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-200 bg-white dark:bg-green-950/50 text-sm"
+                        className="form-input"
                         placeholder="Enter 11-digit NIN"
                       />
                     </div>
@@ -776,7 +751,7 @@ export default function SchoolRegistrationPage() {
                         !formData.adminNin ||
                         formData.adminNin.length !== 11
                       }
-                      className="px-4 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap"
+                      className="btn btn-primary"
                     >
                       {isVerifyingNin ? (
                         <>
@@ -791,8 +766,8 @@ export default function SchoolRegistrationPage() {
                 </div>
 
                 {errors.adminNin && (
-                  <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 mt-4">
-                    <p className="text-sm text-destructive flex items-start">
+                  <div className="alert alert-error mt-4">
+                    <p className="flex items-start">
                       <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                       <span>{errors.adminNin}</span>
                     </p>
@@ -806,7 +781,7 @@ export default function SchoolRegistrationPage() {
               <>
                 {/* Existing Admin Notice */}
                 {ninExists && ninData && (
-                  <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <div className="card bg-green-50 dark:bg-green-950/30">
                     <div className="flex items-start gap-3">
                       <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5" />
                       <div className="flex-1">
@@ -848,7 +823,7 @@ export default function SchoolRegistrationPage() {
 
                 {/* New Admin Notice */}
                 {!ninExists && (
-                  <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <div className="card bg-green-50 dark:bg-green-950/30">
                     <div className="flex items-start gap-3">
                       <User className="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5" />
                       <div>
@@ -870,23 +845,23 @@ export default function SchoolRegistrationPage() {
                 )}
 
                 {/* NIN Field - Locked after verification */}
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2">
+                <div className="form-group">
+                  <label className="form-label">
                     National Identification Number (NIN) *
                   </label>
-                  <div className="relative">
-                    <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <div className="input-group">
+                    <CreditCard className="input-icon-left" />
                     <input
                       type="text"
                       name="adminNin"
                       value={formData.adminNin}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 bg-muted/30 text-foreground"
+                      className="form-input bg-muted/30"
                       placeholder="NIN verified"
                       readOnly={false} // Allow changes but will trigger re-verification
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="form-helper">
                     Changing NIN will clear all prefilled data and require
                     re-verification
                   </p>
@@ -894,95 +869,71 @@ export default function SchoolRegistrationPage() {
 
                 {/* Admin Form Fields */}
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2">
-                      Administrator Name *
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <div className="form-group">
+                    <label className="form-label">Administrator Name *</label>
+                    <div className="input-group">
+                      <User className="input-icon-left" />
                       <input
                         type="text"
                         name="adminName"
                         value={formData.adminName}
                         onChange={handleInputChange}
                         disabled={ninExists}
-                        className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                          ninExists ? "bg-muted/30 text-muted-foreground" : ""
-                        } ${
-                          errors.adminName
-                            ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                            : "border-input hover:border-primary/30"
-                        }`}
+                        className={`form-input ${ninExists ? "bg-muted/30 text-muted-foreground" : ""} ${errors.adminName ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                         placeholder="Enter administrator's full name"
                       />
                     </div>
                     {errors.adminName && (
-                      <p className="text-sm text-destructive flex items-center mt-1">
+                      <p className="form-error flex items-center mt-1">
                         <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                         {errors.adminName}
                       </p>
                     )}
                   </div>
 
-                  {/* Admin Email - No Verification Button */}
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2">
-                      Email Address *
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  {/* Admin Email */}
+                  <div className="form-group">
+                    <label className="form-label">Email Address *</label>
+                    <div className="input-group">
+                      <Mail className="input-icon-left" />
                       <input
                         type="email"
                         name="adminEmail"
                         value={formData.adminEmail}
                         onChange={handleInputChange}
                         disabled={ninExists}
-                        className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                          ninExists ? "bg-muted/30 text-muted-foreground" : ""
-                        } ${
-                          errors.adminEmail
-                            ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                            : "border-input hover:border-primary/30"
-                        }`}
+                        className={`form-input ${ninExists ? "bg-muted/30 text-muted-foreground" : ""} ${errors.adminEmail ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                         placeholder="admin@example.com"
                       />
                     </div>
                     {errors.adminEmail && (
-                      <p className="text-sm text-destructive flex items-center mt-1">
+                      <p className="form-error flex items-center mt-1">
                         <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                         {errors.adminEmail}
                       </p>
                     )}
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="form-helper">
                       Email verification will be required after registration
                     </p>
                   </div>
 
                   {/* Admin Phone */}
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2">
-                      Phone Number *
-                    </label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <div className="form-group">
+                    <label className="form-label">Phone Number *</label>
+                    <div className="input-group">
+                      <Phone className="input-icon-left" />
                       <input
                         type="tel"
                         name="adminPhone"
                         value={formData.adminPhone}
                         onChange={handleInputChange}
                         disabled={ninExists}
-                        className={`w-full pl-10 pr-4 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                          ninExists ? "bg-muted/30 text-muted-foreground" : ""
-                        } ${
-                          errors.adminPhone
-                            ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                            : "border-input hover:border-primary/30"
-                        }`}
+                        className={`form-input ${ninExists ? "bg-muted/30 text-muted-foreground" : ""} ${errors.adminPhone ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                         placeholder="+234 800 123 4567"
                       />
                     </div>
                     {errors.adminPhone && (
-                      <p className="text-sm text-destructive flex items-center mt-1">
+                      <p className="form-error flex items-center mt-1">
                         <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                         {errors.adminPhone}
                       </p>
@@ -991,22 +942,16 @@ export default function SchoolRegistrationPage() {
 
                   {/* Password Fields */}
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div>
-                      <label className="block text-sm font-semibold text-foreground mb-2">
-                        Password *
-                      </label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                    <div className="form-group">
+                      <label className="form-label">Password *</label>
+                      <div className="input-group">
+                        <Lock className="input-icon-left" />
                         <input
                           type={showPassword ? "text" : "password"}
                           name="password"
                           value={formData.password}
                           onChange={handleInputChange}
-                          className={`w-full pl-10 pr-10 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                            errors.password
-                              ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                              : "border-input hover:border-primary/30"
-                          }`}
+                          className={`form-input pr-10 ${errors.password ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                           placeholder={
                             ninExists
                               ? "Enter your password"
@@ -1026,7 +971,7 @@ export default function SchoolRegistrationPage() {
                         </button>
                       </div>
                       {errors.password && (
-                        <p className="text-sm text-destructive flex items-center mt-1">
+                        <p className="form-error flex items-center mt-1">
                           <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                           {errors.password}
                         </p>
@@ -1034,22 +979,16 @@ export default function SchoolRegistrationPage() {
                     </div>
 
                     {!ninExists && (
-                      <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                          Confirm Password *
-                        </label>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                      <div className="form-group">
+                        <label className="form-label">Confirm Password *</label>
+                        <div className="input-group">
+                          <Lock className="input-icon-left" />
                           <input
                             type={showConfirmPassword ? "text" : "password"}
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleInputChange}
-                            className={`w-full pl-10 pr-10 py-3 border border-border/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 ${
-                              errors.confirmPassword
-                                ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                                : "border-input hover:border-primary/30"
-                            }`}
+                            className={`form-input pr-10 ${errors.confirmPassword ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                             placeholder="Confirm your password"
                           />
                           <button
@@ -1067,7 +1006,7 @@ export default function SchoolRegistrationPage() {
                           </button>
                         </div>
                         {errors.confirmPassword && (
-                          <p className="text-sm text-destructive flex items-center mt-1">
+                          <p className="form-error flex items-center mt-1">
                             <span className="w-1.5 h-1.5 bg-destructive rounded-full mr-2"></span>
                             {errors.confirmPassword}
                           </p>
@@ -1078,7 +1017,7 @@ export default function SchoolRegistrationPage() {
 
                   {/* Password Requirements for New Admins */}
                   {!ninExists && (
-                    <div className="bg-warning/10 border border-warning/20 rounded-lg p-3">
+                    <div className="alert alert-warning">
                       <h4 className="font-semibold text-warning-foreground mb-2 text-sm">
                         Password Requirements:
                       </h4>
@@ -1101,7 +1040,7 @@ export default function SchoolRegistrationPage() {
                   )}
 
                   {/* Terms and Conditions */}
-                  <div className="bg-muted/50 border border-border rounded-lg p-4">
+                  <div className="card bg-muted/50">
                     <label className="flex items-start space-x-3">
                       <input
                         type="checkbox"
@@ -1138,14 +1077,14 @@ export default function SchoolRegistrationPage() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-6 py-3 border border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-all duration-200"
+                className="btn btn-outline"
               >
                 Back to School Info
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting || !ninVerified}
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-md hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+                className="btn btn-primary"
               >
                 {isSubmitting ? (
                   <>
@@ -1163,8 +1102,8 @@ export default function SchoolRegistrationPage() {
 
             {/* Submit Error */}
             {errors.submit && (
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                <p className="text-sm text-destructive flex items-start">
+              <div className="alert alert-error">
+                <p className="flex items-start">
                   <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                   <span>{errors.submit}</span>
                 </p>
@@ -1173,8 +1112,8 @@ export default function SchoolRegistrationPage() {
 
             {/* NIN Verification Error */}
             {errors.ninVerification && (
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                <p className="text-sm text-destructive flex items-start">
+              <div className="alert alert-error">
+                <p className="flex items-start">
                   <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                   <span>{errors.ninVerification}</span>
                 </p>
@@ -1198,7 +1137,7 @@ export default function SchoolRegistrationPage() {
               until both the school and administrator emails are verified.
             </p>
 
-            <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-6 max-w-md mx-auto">
+            <div className="card bg-green-50 dark:bg-green-950/30 max-w-md mx-auto">
               <h3 className="font-semibold text-green-900 dark:text-green-100 mb-3 flex items-center justify-center">
                 <Mail className="w-5 h-5 mr-2" />
                 Email Verification Required
@@ -1227,7 +1166,7 @@ export default function SchoolRegistrationPage() {
               </ul>
             </div>
 
-            <div className="bg-muted/50 border border-border rounded-lg p-4 mb-6 max-w-md mx-auto">
+            <div className="card bg-muted/50 max-w-md mx-auto">
               <h3 className="font-semibold text-foreground mb-3">
                 What Happens Next?
               </h3>
@@ -1248,16 +1187,10 @@ export default function SchoolRegistrationPage() {
             </div>
 
             <div className="space-y-3 max-w-sm mx-auto">
-              <Link
-                href="/login"
-                className="block w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:shadow-md hover:scale-[1.02] transition-all duration-200"
-              >
+              <Link href="/login" className="btn btn-primary w-full">
                 Go to Login Page
               </Link>
-              <Link
-                href="/"
-                className="block w-full border border-primary text-primary py-3 px-6 rounded-lg font-semibold hover:bg-primary/5 transition-all duration-200"
-              >
+              <Link href="/" className="btn btn-outline w-full">
                 Return to Home
               </Link>
             </div>
@@ -1286,8 +1219,8 @@ export default function SchoolRegistrationPage() {
           Back to Home
         </Link>
 
-        <div className="bg-card/80 backdrop-blur-sm rounded-xl shadow-lg border border-border/50 overflow-hidden">
-          <div className="p-4 md:p-6 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+        <div className="card bg-card/80 backdrop-blur-sm">
+          <div className="card-header bg-gradient-to-r from-primary/5 to-transparent">
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
               School Registration
             </h1>
@@ -1370,7 +1303,7 @@ export default function SchoolRegistrationPage() {
         </div>
 
         {step < 4 && (
-          <div className="mt-6 bg-card/60 backdrop-blur-sm rounded-xl shadow-md border border-border/50 p-4">
+          <div className="mt-6 card bg-card/60">
             <h3 className="text-lg font-bold text-foreground mb-4 flex items-center">
               <Download className="w-5 h-5 mr-2 text-primary" />
               Registration Resources
