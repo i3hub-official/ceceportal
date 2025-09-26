@@ -19,10 +19,7 @@ const PaymentForm = () => {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-      >
+      <button onClick={() => setIsOpen(true)} className="btn btn-primary">
         Make Payment
       </button>
 
@@ -33,10 +30,7 @@ const PaymentForm = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-foreground mb-1"
-            >
+            <label htmlFor="amount" className="form-label">
               Amount
             </label>
             <input
@@ -46,15 +40,12 @@ const PaymentForm = () => {
               onChange={(e) =>
                 setFormData({ ...formData, amount: e.target.value })
               }
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="form-input"
               required
             />
           </div>
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-foreground mb-1"
-            >
+            <label htmlFor="description" className="form-label">
               Description
             </label>
             <textarea
@@ -63,7 +54,7 @@ const PaymentForm = () => {
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="form-textarea"
               rows={3}
               required
             />
@@ -72,14 +63,11 @@ const PaymentForm = () => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 border rounded-md hover:bg-muted"
+              className="btn btn-outline"
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-            >
+            <button type="submit" className="btn btn-primary">
               Submit Payment
             </button>
           </div>

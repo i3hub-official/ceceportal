@@ -38,7 +38,7 @@ const PlaceholderContent = () => {
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(" ")}
       </h2>
-      <div className="rounded-xl p-8 text-center shadow-sm bg-card border border-border">
+      <div className="card p-8 text-center rounded-xl">
         <IconComponent size={48} className="mx-auto mb-4 text-primary" />
         <p className="text-foreground">
           {activeMenu

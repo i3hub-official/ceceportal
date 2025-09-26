@@ -35,8 +35,8 @@ const subjectData = [
 ];
 
 const statusData = [
-  { name: "Completed", value: 410, color: "hsl(var(--primary))" },
-  { name: "Pending", value: 47, color: "hsl(var(--muted-foreground))" },
+  { name: "Completed", value: 410, color: "var(--primary)" },
+  { name: "Pending", value: 47, color: "var(--muted-foreground)" },
 ];
 
 export default function TrendsInsights() {
@@ -44,10 +44,10 @@ export default function TrendsInsights() {
   const [activeTab, setActiveTab] = useState("registrations");
 
   return (
-    <div className="bg-card rounded-xl p-6 shadow-sm mt-8 mb-8">
+    <div className="card mt-8 mb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-primary/10 rounded-lg">
+          <div className="p-2 bg-primary-10 rounded-lg">
             <TrendingUp className="w-5 h-5 text-primary" />
           </div>
           <div>
@@ -61,7 +61,7 @@ export default function TrendsInsights() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-muted/50 rounded-lg p-1">
+          <div className="flex items-center bg-muted-10 dark:bg-muted-20 rounded-lg p-1">
             <button
               onClick={() => setTimeRange("week")}
               className={`px-3 py-1 text-sm rounded-md transition-colors ${
@@ -84,29 +84,29 @@ export default function TrendsInsights() {
             </button>
           </div>
 
-          <button className="p-2 rounded-lg border border-border hover:bg-muted/50 transition-colors">
+          <button className="p-2 rounded-lg border border-border hover:bg-muted-10 dark:hover:bg-muted-20 transition-colors">
             <Download className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-muted/30 rounded-xl p-4">
+        <div className="bg-muted-10 dark:bg-muted-20 rounded-xl p-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">Total Registrations</p>
-            <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">
+            <span className="text-xs px-2 py-1 bg-primary-10 text-primary rounded-full">
               +12.5%
             </span>
           </div>
           <p className="text-2xl font-bold text-foreground mt-2">457</p>
           <div className="h-[1px] bg-border my-3"></div>
           <p className="text-xs text-muted-foreground">
-            <span className="text-green-500 font-medium">410 completed</span> •
+            <span className="text-success font-medium">410 completed</span> •
             <span className="ml-1">47 pending</span>
           </p>
         </div>
 
-        <div className="bg-muted/30 rounded-xl p-4">
+        <div className="bg-muted-10 dark:bg-muted-20 rounded-xl p-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
               Avg. Daily Registrations
@@ -119,7 +119,7 @@ export default function TrendsInsights() {
           </p>
         </div>
 
-        <div className="bg-muted/30 rounded-xl p-4">
+        <div className="bg-muted-10 dark:bg-muted-20 rounded-xl p-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">Completion Rate</p>
           </div>
@@ -132,7 +132,7 @@ export default function TrendsInsights() {
       </div>
 
       <div className="flex items-center gap-2 mb-4">
-        <div className="flex items-center bg-muted/50 rounded-lg p-1">
+        <div className="flex items-center bg-muted-10 dark:bg-muted-20 rounded-lg p-1">
           <button
             onClick={() => setActiveTab("registrations")}
             className={`px-3 py-1 text-sm rounded-md transition-colors ${
@@ -164,10 +164,7 @@ export default function TrendsInsights() {
                 data={mockData}
                 margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
               >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="hsl(var(--muted)/0.3)"
-                />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--muted-30)" />
                 <XAxis
                   dataKey="day"
                   stroke="currentColor"
@@ -180,14 +177,14 @@ export default function TrendsInsights() {
                 <Area
                   type="monotone"
                   dataKey="registrations"
-                  stroke="hsl(var(--primary))"
-                  fill="hsl(var(--primary)/0.1)"
+                  stroke="var(--primary)"
+                  fill="var(--primary-10)"
                   strokeWidth={2}
                 />
                 <Line
                   type="monotone"
                   dataKey="completed"
-                  stroke="hsl(142, 76%, 36%)"
+                  stroke="var(--success)"
                   strokeWidth={2}
                   strokeDasharray="3 3"
                 />
@@ -246,7 +243,7 @@ export default function TrendsInsights() {
                   >
                     <span className="text-sm text-foreground">{day.day}</span>
                     <div className="flex-1 mx-3">
-                      <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="relative h-2 bg-muted-20 dark:bg-muted-30 rounded-full overflow-hidden">
                         <div
                           className="absolute top-0 left-0 h-full bg-primary rounded-full"
                           style={{
@@ -271,10 +268,7 @@ export default function TrendsInsights() {
               data={subjectData}
               margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
             >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--muted)/0.3)"
-              />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted-30)" />
               <XAxis
                 dataKey="subject"
                 stroke="currentColor"
@@ -286,7 +280,7 @@ export default function TrendsInsights() {
               />
               <Bar
                 dataKey="score"
-                fill="hsl(var(--primary))"
+                fill="var(--primary)"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>

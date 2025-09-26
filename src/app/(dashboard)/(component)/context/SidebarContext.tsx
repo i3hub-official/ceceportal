@@ -69,10 +69,10 @@ const SidebarContext: React.FC<SidebarContextProps> = ({ item }) => {
       {/* Parent button */}
       <button
         onClick={handleParentClick}
-        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left transition-colors duration-200 ${
+        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left transition-colors duration-200 transition-theme ${
           isParentActive
             ? "text-white shadow-md bg-primary"
-            : "hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground"
+            : "text-foreground hover:bg-muted-10 dark:hover:bg-muted-20"
         }`}
       >
         <div className="flex items-center space-x-3">
@@ -101,10 +101,10 @@ const SidebarContext: React.FC<SidebarContextProps> = ({ item }) => {
               <button
                 key={subItem.id}
                 onClick={() => handleSubmenuClick(subItem.id)}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors duration-200 ${
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors duration-200 transition-theme ${
                   isSubmenuActive
                     ? "text-white font-medium bg-primary"
-                    : "text-foreground/70 hover:text-foreground hover:bg-gray-100 dark:hover:bg-gray-700"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted-10 dark:hover:bg-muted-20"
                 }`}
               >
                 <SubIcon width={16} height={16} />

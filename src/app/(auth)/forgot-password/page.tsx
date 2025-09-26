@@ -238,16 +238,16 @@ export default function ForgotPasswordPage() {
       case 1:
         return (
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="alert alert-primary mb-6">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <Mail className="h-5 w-5 text-blue-400" />
+                  <Mail className="h-5 w-5 text-primary" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">
+                  <h3 className="text-sm font-medium text-primary-foreground">
                     Reset your password
                   </h3>
-                  <div className="mt-2 text-sm text-blue-700">
+                  <div className="mt-2 text-sm text-primary-foreground/80">
                     <p>
                       Enter your school&apos;s email address and we&apos;ll send
                       you a verification token to reset your password.
@@ -257,24 +257,19 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
                 School Email Address *
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+              <div className="input-group">
+                <Mail className="input-icon-left" />
                 <input
                   id="email"
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                    errors.email ? "border-red-500" : "border-border"
-                  }`}
+                  className={`form-input ${errors.email ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="school@example.com"
                   aria-required="true"
                   aria-invalid={!!errors.email}
@@ -282,7 +277,7 @@ export default function ForgotPasswordPage() {
                 />
               </div>
               {errors.email && (
-                <p id="email-error" className="mt-1 text-sm text-red-500">
+                <p id="email-error" className="form-error">
                   {errors.email}
                 </p>
               )}
@@ -295,7 +290,7 @@ export default function ForgotPasswordPage() {
                 } as React.FormEvent<HTMLFormElement>)
               }
               disabled={isSubmitting}
-              className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="btn btn-primary w-full"
               aria-busy={isSubmitting}
             >
               {isSubmitting ? (
@@ -313,16 +308,16 @@ export default function ForgotPasswordPage() {
       case 2:
         return (
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="alert alert-primary mb-6">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <Mail className="h-5 w-5 text-blue-400" />
+                  <Mail className="h-5 w-5 text-primary" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">
+                  <h3 className="text-sm font-medium text-primary-foreground">
                     Check your email
                   </h3>
-                  <div className="mt-2 text-sm text-blue-700">
+                  <div className="mt-2 text-sm text-primary-foreground/80">
                     <p>
                       We&apos;ve sent a 6-digit verification token to{" "}
                       <strong>{formData.email}</strong>. Enter it below to reset
@@ -333,10 +328,8 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Verification Token *
-              </label>
+            <div className="form-group">
+              <label className="form-label">Verification Token *</label>
               <VerificationInput
                 value={formData.token}
                 onChange={handleTokenChange}
@@ -346,17 +339,14 @@ export default function ForgotPasswordPage() {
                 aria-describedby={errors.token ? "token-error" : undefined}
               />
               {errors.token && (
-                <p
-                  id="token-error"
-                  className="mt-2 text-sm text-red-500 text-center"
-                >
+                <p id="token-error" className="form-error text-center">
                   {errors.token}
                 </p>
               )}
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <span className="text-foreground/70">
+              <span className="text-muted-foreground">
                 {countdown > 0
                   ? `Resend token in ${formatTime(countdown)}`
                   : "Didn't receive the token?"}
@@ -375,7 +365,7 @@ export default function ForgotPasswordPage() {
             <button
               onClick={() => verifyTokenLogic()}
               disabled={isSubmitting || formData.token.length !== 6}
-              className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="btn btn-primary w-full"
               aria-busy={isSubmitting}
             >
               {isSubmitting ? (
@@ -395,7 +385,7 @@ export default function ForgotPasswordPage() {
                 setIsTokenVerified(false);
                 setFormData((prev) => ({ ...prev, token: "" }));
               }}
-              className="w-full border border-primary text-primary py-3 px-4 rounded-lg font-medium hover:bg-primary/10 transition"
+              className="btn btn-outline w-full"
             >
               Back to Email Entry
             </button>
@@ -405,40 +395,35 @@ export default function ForgotPasswordPage() {
       case 3:
         return (
           <div className="space-y-6">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="alert alert-success mb-6">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <CheckCircle className="h-5 w-5 text-success" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">
+                  <h3 className="text-sm font-medium text-success-foreground">
                     Token Verified Successfully
                   </h3>
-                  <div className="mt-2 text-sm text-green-700">
+                  <div className="mt-2 text-sm text-success-foreground/80">
                     <p>Please create a new password for your school account.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
                 New Password *
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+              <div className="input-group">
+                <Lock className="input-icon-left" />
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                    errors.password ? "border-red-500" : "border-border"
-                  }`}
+                  className={`form-input pr-12 ${errors.password ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="Enter new password"
                   aria-required="true"
                   aria-invalid={!!errors.password}
@@ -448,45 +433,40 @@ export default function ForgotPasswordPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground/30 hover:text-foreground/60"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 text-muted-foreground hover:text-foreground focus:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
+                    <EyeOff className="w-4 h-4" />
                   ) : (
-                    <Eye className="w-5 h-5" />
+                    <Eye className="w-4 h-4" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p id="password-error" className="mt-1 text-sm text-red-500">
+                <p id="password-error" className="form-error">
                   {errors.password}
                 </p>
               )}
-              <p className="mt-1 text-xs text-foreground/60">
+              <p className="form-helper">
                 Password must be at least 8 characters long.
               </p>
             </div>
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+            <div className="form-group">
+              <label htmlFor="confirmPassword" className="form-label">
                 Confirm New Password *
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/30 w-5 h-5" />
+              <div className="input-group">
+                <Lock className="input-icon-left" />
                 <input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                    errors.confirmPassword ? "border-red-500" : "border-border"
-                  }`}
+                  className={`form-input pr-12 ${errors.confirmPassword ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="Confirm new password"
                   aria-required="true"
                   aria-invalid={!!errors.confirmPassword}
@@ -496,24 +476,21 @@ export default function ForgotPasswordPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground/30 hover:text-foreground/60"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 text-muted-foreground hover:text-foreground focus:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition-colors"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   aria-label={
                     showConfirmPassword ? "Hide password" : "Show password"
                   }
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="w-5 h-5" />
+                    <EyeOff className="w-4 h-4" />
                   ) : (
-                    <Eye className="w-5 h-5" />
+                    <Eye className="w-4 h-4" />
                   )}
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p
-                  id="confirmPassword-error"
-                  className="mt-1 text-sm text-red-500"
-                >
+                <p id="confirmPassword-error" className="form-error">
                   {errors.confirmPassword}
                 </p>
               )}
@@ -523,7 +500,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="btn btn-primary w-full"
                 aria-busy={isSubmitting}
               >
                 {isSubmitting ? (
@@ -542,27 +519,21 @@ export default function ForgotPasswordPage() {
       case 4:
         return (
           <div className="text-center py-8">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-green-600" />
+            <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-10 h-10 text-success" />
             </div>
             <h2 className="text-2xl font-bold text-foreground mb-4">
               Password Reset Successful!
             </h2>
-            <p className="text-foreground/70 mb-6">
+            <p className="text-muted-foreground mb-6">
               Your school account password has been successfully reset. You can
               now log in with your new password.
             </p>
-            <div className="space-y-4">
-              <Link
-                href="/login"
-                className="block w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition"
-              >
+            <div className="space-y-3 max-w-sm mx-auto">
+              <Link href="/login" className="btn btn-primary w-full">
                 Proceed to Login
               </Link>
-              <Link
-                href="/"
-                className="block w-full border border-primary text-primary py-3 rounded-lg font-medium hover:bg-primary/10 transition"
-              >
+              <Link href="/" className="btn btn-outline w-full">
                 Return to Home
               </Link>
             </div>
@@ -617,7 +588,7 @@ export default function ForgotPasswordPage() {
                   ? "Create New Password"
                   : "Password Reset"}
           </h2>
-          <p className="mt-2 text-sm text-center text-foreground/70">
+          <p className="mt-2 text-sm text-center text-muted-foreground">
             {step === 1
               ? "Enter your school email to receive a verification token"
               : step === 2
@@ -628,9 +599,9 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
 
-        <div className="bg-card rounded-xl shadow-lg p-6">{renderStep()}</div>
+        <div className="card">{renderStep()}</div>
 
-        <div className="text-center text-sm text-foreground/60">
+        <div className="text-center text-sm text-muted-foreground">
           <p>
             Need help? Contact the CEC support team at{" "}
             <a

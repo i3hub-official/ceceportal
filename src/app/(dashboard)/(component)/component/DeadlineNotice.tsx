@@ -47,7 +47,7 @@ export default function DeadlineNotice({
 
   if (variant === "detailed") {
     return (
-      <div className="bg-card rounded-xl p-6 shadow-sm mb-10">
+      <div className="card mb-10">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-muted-foreground">
@@ -58,22 +58,23 @@ export default function DeadlineNotice({
               Final date for registration (Saturday)
             </p>
           </div>
-          <div className="bg-green-100 p-3 rounded-full dark:bg-green-900/30">
-            <Calendar className="w-6 h-6 text-green-600 dark:text-green-400" />
+          <div className="bg-success-10 p-3 rounded-full dark:bg-success-20">
+            <Calendar className="w-6 h-6 text-success dark:text-success-80" />
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-2 px-3 py-2 bg-amber-100 text-amber-800 rounded-lg dark:bg-amber-900/30 dark:text-amber-300">
+        <div className="mt-4 flex items-center gap-2 px-3 py-2 bg-warning-10 text-warning rounded-lg dark:bg-warning-20 dark:text-warning-80">
           <Clock className="w-4 h-4" />
           <span className="text-sm">
             {daysUntilDeadline} days until registration closes
           </span>
         </div>
       </div>
-    );  }
+    );
+  }
 
   return (
     <div
-      className={`flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-lg dark:bg-amber-900/30 dark:text-amber-300 ${className}`}
+      className={`flex items-center gap-2 px-4 py-2 bg-warning-10 text-warning rounded-lg dark:bg-warning-20 dark:text-warning-80 ${className}`}
     >
       <Clock className="w-4 h-4" />
       <span>

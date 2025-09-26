@@ -15,13 +15,13 @@ const Header = () => {
   const centreNumber = "00145244";
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between h-16 px-6 shadow-sm bg-card border-border lg:left-64 transition-all duration-300">
+    <header className="nav fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 lg:left-64 transition-all duration-300">
       {/* Left */}
       <div className="flex items-center space-x-4">
         {/* Sidebar toggle (mobile only) */}
         <button
           onClick={toggleSidebar}
-          className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="lg:hidden p-2 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20"
         >
           <Menu size={20} />
         </button>
@@ -51,7 +51,7 @@ const Header = () => {
           </h1>
 
           {/* Centre number */}
-          <h3 className="text-xs sm:text-sm text-foreground/70 mt-1">
+          <h3 className="text-xs sm:text-sm text-muted-foreground mt-1">
             {/* Mobile: only digits */}
             <span className="sm:hidden font-medium">{centreNumber}</span>
 
@@ -65,16 +65,16 @@ const Header = () => {
 
       {/* Right actions */}
       <div className="flex items-center space-x-3">
-        <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+        <button className="p-2 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20">
           <Search size={20} className="text-foreground" />
         </button>
-        <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 relative">
+        <button className="p-2 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20 relative">
           <Bell size={20} className="text-foreground" />
           <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent" />
         </button>
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="p-2 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20"
         >
           {darkMode ? (
             <Sun size={20} className="text-accent" />

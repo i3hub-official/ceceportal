@@ -11,11 +11,11 @@ export default function StatCard() {
     return `${Math.round((value / total) * 100)}%`;
   };
 
-  // Color mapping for Tailwind classes
+  // Color mapping for I3CSS classes
   const colorMap = {
-    primary: { bg: "bg-primary/20", text: "text-primary" },
-    secondary: { bg: "bg-secondary/20", text: "text-secondary" },
-    accent: { bg: "bg-accent/20", text: "text-accent" },
+    primary: { bg: "bg-primary-20", text: "text-primary" },
+    secondary: { bg: "bg-secondary-20", text: "text-secondary" },
+    accent: { bg: "bg-accent-20", text: "text-accent" },
   };
 
   const data = [
@@ -52,7 +52,7 @@ export default function StatCard() {
         return (
           <div
             key={index}
-            className="p-6 rounded-xl shadow-sm bg-card  flex flex-col"
+            className="card flex flex-col"
           >
             {/* Header Row: title + badge */}
             <div className="flex items-center justify-between mb-4">

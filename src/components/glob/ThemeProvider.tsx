@@ -12,6 +12,10 @@ export default function ThemeProvider({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Set transition styles for smooth theme change
+    document.documentElement.style.transition =
+      "color 300ms ease, background-color 300ms ease";
+
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -45,7 +49,7 @@ export default function ThemeProvider({
         onClick={toggleTheme}
         className="fixed top-24 right-4 z-50 p-3 rounded-full bg-background/80 backdrop-blur-sm 
                  text-foreground border border-border shadow-lg hover:scale-110 transition-all 
-                 duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 
+                 transition-normal focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 
                  focus:ring-offset-background"
         aria-label={
           theme === "dark" ? "Switch to light mode" : "Switch to dark mode"

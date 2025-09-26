@@ -19,7 +19,7 @@ function VerificationLoading() {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             School Email Verification
           </h2>
-          <p className="text-lg text-foreground/70 mb-8">
+          <p className="text-lg text-muted-foreground mb-8">
             Loading verification page...
           </p>
         </div>
@@ -102,15 +102,15 @@ function VerifyCenterEmailContent() {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             School Email Verification
           </h2>
-          <p className="text-lg text-foreground/70 mb-8">{message}</p>
+          <p className="text-lg text-muted-foreground mb-8">{message}</p>
         </div>
 
-        <div className="bg-card rounded-xl shadow-lg p-6">
+        <div className="card">
           <div className="flex flex-col items-center justify-center">
             {status === "loading" && (
               <div className="flex flex-col items-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-                <p className="text-foreground/70">
+                <p className="text-muted-foreground">
                   Please wait while we verify your email...
                 </p>
               </div>
@@ -118,13 +118,13 @@ function VerifyCenterEmailContent() {
 
             {status === "success" && (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle className="w-8 h-8 text-success" />
                 </div>
-                <p className="text-green-600 font-medium text-center mb-4">
+                <p className="text-success font-medium text-center mb-4">
                   Verification successful!
                 </p>
-                <p className="text-foreground/70 text-center">
+                <p className="text-muted-foreground text-center">
                   You will be redirected to the login page in 5 seconds.
                 </p>
               </div>
@@ -132,23 +132,25 @@ function VerifyCenterEmailContent() {
 
             {status === "error" && (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                  <XCircle className="w-8 h-8 text-red-600" />
+                <div className="w-16 h-16 bg-error/10 rounded-full flex items-center justify-center mb-4">
+                  <XCircle className="w-8 h-8 text-error" />
                 </div>
-                <p className="text-red-600 font-medium text-center mb-4">
+                <p className="text-error font-medium text-center mb-4">
                   Verification failed
                 </p>
-                <p className="text-foreground/70 text-center mb-6">{message}</p>
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 w-full">
+                <p className="text-muted-foreground text-center mb-6">
+                  {message}
+                </p>
+                <div className="alert alert-warning w-full">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <AlertCircle className="h-5 w-5 text-amber-400" />
+                      <AlertCircle className="h-5 w-5 text-warning-foreground" />
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-amber-800">
+                      <h3 className="text-sm font-medium text-warning-foreground">
                         Need help?
                       </h3>
-                      <div className="mt-2 text-sm text-amber-700">
+                      <div className="mt-2 text-sm text-warning-foreground/80">
                         <p>
                           If you continue to have issues, please contact our
                           support team at{" "}
@@ -168,7 +170,7 @@ function VerifyCenterEmailContent() {
           </div>
         </div>
 
-        <div className="text-center text-sm text-foreground/60">
+        <div className="text-center text-sm text-muted-foreground">
           <p>
             You will be automatically redirected to the login page in 5 seconds.
           </p>

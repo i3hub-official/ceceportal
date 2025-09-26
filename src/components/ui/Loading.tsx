@@ -34,7 +34,7 @@ export default function Loading({
   const SpinnerLoader = () => (
     <div className="relative">
       <div
-        className={`animate-spin rounded-full border-2 border-muted ${sizeClasses[size]}`}
+        className={`animate-spin rounded-full border-2 border-border ${sizeClasses[size]}`}
       />
       <div
         className={`absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-primary ${sizeClasses[size]}`}
@@ -175,7 +175,7 @@ export default function Loading({
   if (overlay) {
     return (
       <div className="absolute inset-0 z-40 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-        <div className="bg-card border border-border rounded-xl p-6 shadow-lg">
+        <div className="card p-6">
           <LoadingContent />
         </div>
       </div>

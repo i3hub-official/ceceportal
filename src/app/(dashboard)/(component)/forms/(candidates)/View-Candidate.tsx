@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState, useMemo } from "react";
 import {
   Search,
@@ -14,14 +14,14 @@ import {
   Phone,
   Mail,
   FileText,
-    ChevronDown,
+  ChevronDown,
   X,
   CheckCircle,
   AlertCircle,
   Clock,
   SortAsc,
   SortDesc,
-  } from "lucide-react";
+} from "lucide-react";
 
 // Mock candidate data
 type Candidate = {
@@ -142,13 +142,18 @@ const CandidateViewPage = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [selectedState, setSelectedState] = useState<string>("All");
   const [selectedGender, setSelectedGender] = useState<string>("All");
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: "" | "ascending" | "descending" }>({ key: "", direction: "" });
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: "" | "ascending" | "descending";
+  }>({ key: "", direction: "" });
   const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [showExportMenu, setShowExportMenu] = useState<boolean>(false);
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(
+    null
+  );
 
   // Get unique values for filters
   const uniqueStates = [...new Set(candidates.map((c) => c.state))];
@@ -184,7 +189,28 @@ const CandidateViewPage = () => {
     if (!sortConfig.key) return filteredCandidates;
 
     // Type guard to ensure sortConfig.key is a valid keyof Candidate
-    if ((["id", "surname", "firstName", "otherName", "email", "phoneNumber", "dateOfBirth", "gender", "state", "lga", "nin", "disability", "registrationDate", "status", "examScore", "profilePhoto"] as string[]).includes(sortConfig.key)) {
+    if (
+      (
+        [
+          "id",
+          "surname",
+          "firstName",
+          "otherName",
+          "email",
+          "phoneNumber",
+          "dateOfBirth",
+          "gender",
+          "state",
+          "lga",
+          "nin",
+          "disability",
+          "registrationDate",
+          "status",
+          "examScore",
+          "profilePhoto",
+        ] as string[]
+      ).includes(sortConfig.key)
+    ) {
       return [...filteredCandidates].sort((a, b) => {
         const key = sortConfig.key as keyof Candidate;
         const aValue = a[key] ?? "";
@@ -316,13 +342,13 @@ const CandidateViewPage = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Active":
-        return "text-green-600 bg-green-50 border-green-200";
+        return "text-success bg-success-10 border-success-20";
       case "Pending":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+        return "text-warning bg-warning-10 border-warning-20";
       case "Inactive":
-        return "text-red-600 bg-red-50 border-red-200";
+        return "text-error bg-error-10 border-error-20";
       default:
-        return "text-gray-600 bg-gray-50 border-gray-200";
+        return "text-muted-foreground bg-muted-10 border-muted-20";
     }
   };
 
@@ -340,21 +366,21 @@ const CandidateViewPage = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
                 <Users className="w-6 h-6" />
                 Candidates Management
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-muted-foreground mt-1">
                 View, manage, and export candidate information
               </p>
             </div>
-            <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            <button className="btn btn-primary flex items-center gap-2">
               <Plus className="w-4 h-4" />
               Add New Candidate
             </button>
@@ -363,71 +389,74 @@ const CandidateViewPage = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
+          <div className="card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Total Candidates</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-muted-foreground text-sm">
+                  Total Candidates
+                </p>
+                <p className="text-2xl font-bold text-foreground">
                   {candidates.length}
                 </p>
               </div>
-              <Users className="w-8 h-8 text-blue-600" />
+              <Users className="w-8 h-8 text-primary" />
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
+          <div className="card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Active</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-muted-foreground text-sm">Active</p>
+                <p className="text-2xl font-bold text-success">
                   {candidates.filter((c) => c.status === "Active").length}
                 </p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-8 h-8 text-success" />
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
+          <div className="card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">
+                <p className="text-muted-foreground text-sm">Pending</p>
+                <p className="text-2xl font-bold text-warning">
                   {candidates.filter((c) => c.status === "Pending").length}
                 </p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-600" />
+              <Clock className="w-8 h-8 text-warning" />
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
+          <div className="card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Avg Score</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-muted-foreground text-sm">Avg Score</p>
+                <p className="text-2xl font-bold text-accent">
                   {Math.round(
                     candidates
                       .filter((c) => c.examScore !== null)
                       .reduce((acc, c) => acc + (c.examScore ?? 0), 0) /
-                      (candidates.filter((c) => c.examScore !== null).length || 1)
+                      (candidates.filter((c) => c.examScore !== null).length ||
+                        1)
                   ) || 0}
                 </p>
               </div>
-              <FileText className="w-8 h-8 text-purple-600" />
+              <FileText className="w-8 h-8 text-accent" />
             </div>
           </div>
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow-sm border mb-6">
-          <div className="p-4 border-b">
+        <div className="card mb-6">
+          <div className="p-4 border-b border-border">
             <div className="flex flex-col sm:flex-row gap-4">
               {/* Search */}
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <input
                     type="text"
                     placeholder="Search candidates..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
@@ -437,8 +466,8 @@ const CandidateViewPage = () => {
                 onClick={() => setShowFilters(!showFilters)}
                 className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition ${
                   showFilters
-                    ? "bg-blue-50 border-blue-300 text-blue-700"
-                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                    ? "bg-primary-10 border-primary-30 text-primary"
+                    : "border-border text-foreground hover:bg-muted-10"
                 }`}
               >
                 <Filter className="w-4 h-4" />
@@ -452,7 +481,7 @@ const CandidateViewPage = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                  className="btn btn-primary flex items-center gap-2"
                 >
                   <Download className="w-4 h-4" />
                   Export
@@ -460,14 +489,14 @@ const CandidateViewPage = () => {
                 </button>
 
                 {showExportMenu && (
-                  <div className="absolute right-0 top-12 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-48">
+                  <div className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg z-10 min-w-48">
                     <div className="p-2">
                       <button
                         onClick={() => {
                           exportToCSV();
                           setShowExportMenu(false);
                         }}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-muted-10 rounded flex items-center gap-2"
                       >
                         <FileText className="w-4 h-4" />
                         Export as CSV
@@ -477,7 +506,7 @@ const CandidateViewPage = () => {
                           exportToPDF();
                           setShowExportMenu(false);
                         }}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-muted-10 rounded flex items-center gap-2"
                       >
                         <FileText className="w-4 h-4" />
                         Export as PDF
@@ -487,18 +516,18 @@ const CandidateViewPage = () => {
                           exportToExcel();
                           setShowExportMenu(false);
                         }}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-muted-10 rounded flex items-center gap-2"
                       >
                         <FileText className="w-4 h-4" />
                         Export as Excel
                       </button>
-                      <hr className="my-2" />
+                      <hr className="my-2 border-border" />
                       <button
                         onClick={() => {
                           exportToCSV(paginatedCandidates);
                           setShowExportMenu(false);
                         }}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded text-blue-600"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-muted-10 rounded text-primary"
                       >
                         Export Current Page
                       </button>
@@ -508,7 +537,7 @@ const CandidateViewPage = () => {
                             exportToCSV();
                             setShowExportMenu(false);
                           }}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded text-green-600"
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-muted-10 rounded text-success"
                         >
                           Export Selected ({selectedCandidates.length})
                         </button>
@@ -522,16 +551,14 @@ const CandidateViewPage = () => {
 
           {/* Expanded Filters */}
           {showFilters && (
-            <div className="p-4 bg-gray-50 border-t">
+            <div className="p-4 bg-muted-10 dark:bg-muted-20 border-t border-border">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Status
-                  </label>
+                  <label className="form-label">Status</label>
                   <select
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                    className="form-select"
                   >
                     <option value="All">All Statuses</option>
                     {uniqueStatuses.map((status) => (
@@ -543,13 +570,11 @@ const CandidateViewPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    State
-                  </label>
+                  <label className="form-label">State</label>
                   <select
                     value={selectedState}
                     onChange={(e) => setSelectedState(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                    className="form-select"
                   >
                     <option value="All">All States</option>
                     {uniqueStates.map((state) => (
@@ -561,13 +586,11 @@ const CandidateViewPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Gender
-                  </label>
+                  <label className="form-label">Gender</label>
                   <select
                     value={selectedGender}
                     onChange={(e) => setSelectedGender(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                    className="form-select"
                   >
                     <option value="All">All Genders</option>
                     <option value="Male">Male</option>
@@ -579,12 +602,12 @@ const CandidateViewPage = () => {
               <div className="flex justify-between items-center mt-4">
                 <button
                   onClick={clearFilters}
-                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
                 >
                   <X className="w-4 h-4" />
                   Clear Filters
                 </button>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   Showing {sortedCandidates.length} of {candidates.length}{" "}
                   candidates
                 </p>
@@ -594,10 +617,10 @@ const CandidateViewPage = () => {
         </div>
 
         {/* Data Table */}
-        <div className="bg-white rounded-lg shadow-sm border">
+        <div className="card overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
+            <table className="table">
+              <thead className="bg-muted-10 dark:bg-muted-20 border-b border-border">
                 <tr>
                   <th className="px-4 py-3 text-left">
                     <input
@@ -608,7 +631,7 @@ const CandidateViewPage = () => {
                         paginatedCandidates.length > 0
                       }
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="rounded border-gray-300"
+                      className="rounded border-border"
                     />
                   </th>
                   {[
@@ -622,7 +645,7 @@ const CandidateViewPage = () => {
                   ].map((column) => (
                     <th
                       key={column.key}
-                      className="px-4 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
+                      className="px-4 py-3 text-left text-sm font-medium text-foreground cursor-pointer hover:bg-muted-10 dark:hover:bg-muted-20"
                       onClick={() => handleSort(column.key)}
                     >
                       <div className="flex items-center gap-1">
@@ -636,14 +659,17 @@ const CandidateViewPage = () => {
                       </div>
                     </th>
                   ))}
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {paginatedCandidates.map((candidate) => (
-                  <tr key={candidate.id} className="hover:bg-gray-50">
+                  <tr
+                    key={candidate.id}
+                    className="hover:bg-muted-10 dark:hover:bg-muted-20"
+                  >
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
@@ -651,34 +677,34 @@ const CandidateViewPage = () => {
                         onChange={(e) =>
                           handleSelectCandidate(candidate.id, e.target.checked)
                         }
-                        className="rounded border-gray-300"
+                        className="rounded border-border"
                       />
                     </td>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                    <td className="px-4 py-3 text-sm font-medium text-foreground">
                       {candidate.id}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                          <Users className="w-4 h-4 text-gray-600" />
+                        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                          <Users className="w-4 h-4 text-muted-foreground" />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-foreground">
                             {`${candidate.surname} ${candidate.firstName} ${candidate.otherName || ""}`.trim()}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-muted-foreground">
                             {candidate.gender}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
                       {candidate.email}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
                       {candidate.phoneNumber}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {candidate.state}
@@ -692,29 +718,29 @@ const CandidateViewPage = () => {
                         {candidate.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
                       {candidate.examScore ? (
                         <span
-                          className={`font-medium ${candidate.examScore >= 80 ? "text-green-600" : candidate.examScore >= 60 ? "text-yellow-600" : "text-red-600"}`}
+                          className={`font-medium ${candidate.examScore >= 80 ? "text-success" : candidate.examScore >= 60 ? "text-warning" : "text-error"}`}
                         >
                           {candidate.examScore}%
                         </span>
                       ) : (
-                        <span className="text-gray-400">N/A</span>
+                        <span className="text-muted-foreground">N/A</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <button
-                          className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-1 text-primary hover:bg-primary-10 rounded"
                           onClick={() => setSelectedCandidate(candidate)}
                         >
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button className="p-1 text-green-600 hover:bg-green-50 rounded">
+                        <button className="p-1 text-success hover:bg-success-10 rounded">
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="p-1 text-red-600 hover:bg-red-50 rounded">
+                        <button className="p-1 text-error hover:bg-error-10 rounded">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -726,27 +752,27 @@ const CandidateViewPage = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t border-border">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Show</span>
+              <span className="text-sm text-muted-foreground">Show</span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                className="border border-gray-300 rounded px-2 py-1 text-sm"
+                className="form-select py-1 text-sm"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
               </select>
-              <span className="text-sm text-gray-600">entries</span>
+              <span className="text-sm text-muted-foreground">entries</span>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                className="btn btn-sm btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
@@ -759,10 +785,8 @@ const CandidateViewPage = () => {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-1 text-sm border rounded ${
-                        currentPage === page
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "border-gray-300 hover:bg-gray-50"
+                      className={`btn btn-sm ${
+                        currentPage === page ? "btn-primary" : "btn-outline"
                       }`}
                     >
                       {page}
@@ -776,13 +800,13 @@ const CandidateViewPage = () => {
                   setCurrentPage(Math.min(totalPages, currentPage + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                className="btn btn-sm btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
               </button>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
               {Math.min(currentPage * itemsPerPage, sortedCandidates.length)} of{" "}
               {sortedCandidates.length} candidates
@@ -793,13 +817,15 @@ const CandidateViewPage = () => {
         {/* Candidate Detail Modal */}
         {selectedCandidate && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">Candidate Details</h2>
+                  <h2 className="text-xl font-bold text-foreground">
+                    Candidate Details
+                  </h2>
                   <button
                     onClick={() => setSelectedCandidate(null)}
-                    className="p-1 hover:bg-gray-100 rounded"
+                    className="p-1 hover:bg-muted-10 rounded"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -808,14 +834,16 @@ const CandidateViewPage = () => {
                 <div className="space-y-6">
                   {/* Profile Section */}
                   <div className="flex items-start gap-4">
-                    <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
-                      <Users className="w-8 h-8 text-gray-600" />
+                    <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center">
+                      <Users className="w-8 h-8 text-muted-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-foreground">
                         {`${selectedCandidate.surname} ${selectedCandidate.firstName} ${selectedCandidate.otherName || ""}`.trim()}
                       </h3>
-                      <p className="text-gray-600">{selectedCandidate.id}</p>
+                      <p className="text-muted-foreground">
+                        {selectedCandidate.id}
+                      </p>
                       <div className="flex items-center gap-2 mt-2">
                         <span
                           className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium border rounded-full ${getStatusColor(selectedCandidate.status)}`}
@@ -824,10 +852,10 @@ const CandidateViewPage = () => {
                           {selectedCandidate.status}
                         </span>
                         {selectedCandidate.examScore && (
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-muted-foreground">
                             Score:{" "}
                             <span
-                              className={`font-medium ${selectedCandidate.examScore >= 80 ? "text-green-600" : selectedCandidate.examScore >= 60 ? "text-yellow-600" : "text-red-600"}`}
+                              className={`font-medium ${selectedCandidate.examScore >= 80 ? "text-success" : selectedCandidate.examScore >= 60 ? "text-warning" : "text-error"}`}
                             >
                               {selectedCandidate.examScore}%
                             </span>
@@ -840,56 +868,60 @@ const CandidateViewPage = () => {
                   {/* Personal Information */}
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h4 className="font-medium text-gray-900 border-b pb-2">
+                      <h4 className="font-medium text-foreground border-b border-border pb-2">
                         Personal Information
                       </h4>
 
                       <div className="space-y-3 text-sm">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">Date of Birth:</span>
-                          <span className="font-medium">
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">
+                            Date of Birth:
+                          </span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.dateOfBirth}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">Gender:</span>
-                          <span className="font-medium">
+                          <Users className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">Gender:</span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.gender}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">Phone:</span>
-                          <span className="font-medium">
+                          <Phone className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">Phone:</span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.phoneNumber}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">Email:</span>
-                          <span className="font-medium">
+                          <Mail className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">Email:</span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.email}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <FileText className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">NIN:</span>
-                          <span className="font-medium">
+                          <FileText className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">NIN:</span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.nin}
                           </span>
                         </div>
 
                         {selectedCandidate.disability && (
                           <div className="flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-600">Disability:</span>
-                            <span className="font-medium">
+                            <AlertCircle className="w-4 h-4 text-muted-foreground" />
+                            <span className="text-muted-foreground">
+                              Disability:
+                            </span>
+                            <span className="font-medium text-foreground">
                               {selectedCandidate.disability}
                             </span>
                           </div>
@@ -898,31 +930,33 @@ const CandidateViewPage = () => {
                     </div>
 
                     <div className="space-y-4">
-                      <h4 className="font-medium text-gray-900 border-b pb-2">
+                      <h4 className="font-medium text-foreground border-b border-border pb-2">
                         Location & Registration
                       </h4>
 
                       <div className="space-y-3 text-sm">
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">State:</span>
-                          <span className="font-medium">
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">State:</span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.state}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">LGA:</span>
-                          <span className="font-medium">
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">LGA:</span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.lga}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-600">Registered:</span>
-                          <span className="font-medium">
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">
+                            Registered:
+                          </span>
+                          <span className="font-medium text-foreground">
                             {selectedCandidate.registrationDate}
                           </span>
                         </div>
@@ -931,15 +965,15 @@ const CandidateViewPage = () => {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex justify-end gap-3 pt-4 border-t">
+                  <div className="flex justify-end gap-3 pt-4 border-t border-border">
                     <button
                       onClick={() => exportToCSV([selectedCandidate])}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                      className="btn btn-success flex items-center gap-2"
                     >
                       <Download className="w-4 h-4" />
                       Export Details
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    <button className="btn btn-primary flex items-center gap-2">
                       <Edit className="w-4 h-4" />
                       Edit Candidate
                     </button>

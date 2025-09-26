@@ -1,9 +1,4 @@
-import {
-  ToolCase,
-  Printer,
-  Send,
-  Settings,
-} from "lucide-react";
+import { ToolCase, Printer, Send, Settings } from "lucide-react";
 
 export default function QuickLinks() {
   const handleCardClick = (action: string, reportType?: string) => {
@@ -15,14 +10,14 @@ export default function QuickLinks() {
 
   // Base for wide (rectangular) action cards
   const wideCardBase =
-    "flex flex-row items-center p-4 rounded-xl backdrop-blur-md bg-white/40 dark:bg-gray-800/30 shadow-sm transition-all duration-300 cursor-pointer group h-20 md:h-24";
+    "flex flex-row items-center p-4 rounded-xl backdrop-blur-md bg-background/40 dark:bg-card/30 shadow-sm transition-all duration-300 cursor-pointer group h-20 md:h-24";
 
   return (
     <div className="space-y-6 mt-8 mb-8">
       {/* Additional Actions */}
-      <div className="bg-card rounded-xl p-6 shadow-sm">
+      <div className="card">
         <div className="flex items-center gap-2 mb-5">
-          <div className="p-2 bg-primary/10 rounded-lg">
+          <div className="p-2 bg-primary-10 rounded-lg">
             <ToolCase className="w-5 h-5 text-primary" />
           </div>
           <div>
@@ -38,16 +33,16 @@ export default function QuickLinks() {
             onClick={() =>
               handleCardClick("send-reminders", "pending-registrations")
             }
-            className={`${wideCardBase} hover:bg-red-100/60 dark:hover:bg-red-900/40 hover:shadow-lg`}
+            className={`${wideCardBase} hover:bg-error-10 dark:hover:bg-error-20 hover:shadow-lg`}
           >
-            <div className="bg-red-100 p-3 rounded-full mr-4 dark:bg-red-900/30 group-hover:bg-red-200 dark:group-hover:bg-red-800/50 transition-colors">
-              <Send className="w-6 h-6 text-red-600 dark:text-red-400" />
+            <div className="bg-error-10 p-3 rounded-full mr-4 dark:bg-error-20 group-hover:bg-error-20 dark:group-hover:bg-error-30 transition-colors">
+              <Send className="w-6 h-6 text-error dark:text-error-80" />
             </div>
             <div className="flex flex-col items-start">
-              <span className="font-medium text-foreground group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors">
+              <span className="font-medium text-foreground group-hover:text-error-80 dark:group-hover:text-error-60 transition-colors">
                 Send Reminders
               </span>
-              <span className="text-xs text-muted-foreground mt-1 group-hover:text-red-600/80 dark:group-hover:text-red-200 transition-colors">
+              <span className="text-xs text-muted-foreground mt-1 group-hover:text-error-60 dark:group-hover:text-error-40 transition-colors">
                 To unregistered students
               </span>
             </div>
@@ -56,16 +51,16 @@ export default function QuickLinks() {
           {/* Bulk Print */}
           <button
             onClick={() => handleCardClick("bulk-print", "batch-cards")}
-            className={`${wideCardBase} hover:bg-indigo-100/60 dark:hover:bg-indigo-900/40 hover:shadow-lg`}
+            className={`${wideCardBase} hover:bg-secondary-10 dark:hover:bg-secondary-20 hover:shadow-lg`}
           >
-            <div className="bg-indigo-100 p-3 rounded-full mr-4 dark:bg-indigo-900/30 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition-colors">
-              <Printer className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <div className="bg-secondary-10 p-3 rounded-full mr-4 dark:bg-secondary-20 group-hover:bg-secondary-20 dark:group-hover:bg-secondary-30 transition-colors">
+              <Printer className="w-6 h-6 text-secondary dark:text-secondary-80" />
             </div>
             <div className="flex flex-col items-start">
-              <span className="font-medium text-foreground group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors">
+              <span className="font-medium text-foreground group-hover:text-secondary-80 dark:group-hover:text-secondary-60 transition-colors">
                 Bulk Print
               </span>
-              <span className="text-xs text-muted-foreground mt-1 group-hover:text-indigo-600/80 dark:group-hover:text-indigo-200 transition-colors">
+              <span className="text-xs text-muted-foreground mt-1 group-hover:text-secondary-60 dark:group-hover:text-secondary-40 transition-colors">
                 Multiple exam cards
               </span>
             </div>
@@ -74,16 +69,16 @@ export default function QuickLinks() {
           {/* Exam Settings */}
           <button
             onClick={() => handleCardClick("settings", "exam-configuration")}
-            className={`${wideCardBase} hover:bg-gray-100/60 dark:hover:bg-gray-900/40 hover:shadow-lg`}
+            className={`${wideCardBase} hover:bg-muted-10 dark:hover:bg-muted-20 hover:shadow-lg`}
           >
-            <div className="bg-gray-100 p-3 rounded-full mr-4 dark:bg-gray-900/30 group-hover:bg-gray-200 dark:group-hover:bg-gray-800/50 transition-colors">
-              <Settings className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+            <div className="bg-muted-10 p-3 rounded-full mr-4 dark:bg-muted-20 group-hover:bg-muted-20 dark:group-hover:bg-muted-30 transition-colors">
+              <Settings className="w-6 h-6 text-muted-foreground dark:text-muted-foreground" />
             </div>
             <div className="flex flex-col items-start">
-              <span className="font-medium text-foreground group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
+              <span className="font-medium text-foreground group-hover:text-muted dark:group-hover:text-muted-foreground transition-colors">
                 Exam Settings
               </span>
-              <span className="text-xs text-muted-foreground mt-1 group-hover:text-gray-600/80 dark:group-hover:text-gray-200 transition-colors">
+              <span className="text-xs text-muted-foreground mt-1 group-hover:text-muted-foreground dark:group-hover:text-muted transition-colors">
                 Configure MOCK exam
               </span>
             </div>

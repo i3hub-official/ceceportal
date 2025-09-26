@@ -33,12 +33,12 @@ const Dashboard = () => {
       {/* Overlay for mobile sidebar with blur effect */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-transparent bg-opacity-50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
           onClick={toggleSidebar}
         />
       )}
 
-      <div className="flex-1 flex flex-col lg:ml-64">
+      <div className="flex-1 flex flex-col lg:ml-sidebar">
         <Header />
         <MainContent />
       </div>

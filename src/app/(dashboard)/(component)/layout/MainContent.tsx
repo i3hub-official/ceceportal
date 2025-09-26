@@ -69,9 +69,9 @@ const MainContent = () => {
   const { activeMenu } = useNavigation();
 
   return (
-    <main className="flex-1 overflow-auto ">
+    <main className="flex-1 overflow-auto">
       <div className="p-6 bg-background transition-colors duration-300">
-        <div className="max-w-10xl mx-auto h-full">
+        <div className="container mx-auto">
           {contentMap[activeMenu] || <PlaceholderContent />}
         </div>
       </div>

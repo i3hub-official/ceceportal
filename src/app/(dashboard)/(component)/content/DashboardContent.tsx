@@ -9,12 +9,12 @@ import UpcomingEvents from "../component/UpcomingEvents";
 
 const DashboardContent = () => {
   return (
-    <div>
+    <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-2 text-foreground">
           Welcome to Dashboard
         </h2>
-        <p className="text-foreground opacity-70">
+        <p className="text-muted-foreground">
           Overview of your school management system
         </p>
       </div>

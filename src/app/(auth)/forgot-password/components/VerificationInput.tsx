@@ -8,7 +8,7 @@ export default function VerificationInput({
   value,
   onChange,
   verified = false,
-  error = false, 
+  error = false,
 }: {
   length?: number;
   value: string;
@@ -97,14 +97,13 @@ export default function VerificationInput({
           onChange={(e) => handleChange(idx, e.target.value)}
           onKeyDown={(e) => handleKeyDown(idx, e)}
           onPaste={handlePaste}
-          className={`w-12 h-12 border rounded-lg text-center text-xl font-mono 
-            focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300
+          className={`form-input w-12 h-12 text-center text-xl font-mono px-0
             ${
               verified
-                ? "border-green-500 ring-2 ring-green-500 bg-green-50 cursor-not-allowed"
+                ? "border-success ring-2 ring-success bg-success/10 cursor-not-allowed"
                 : error
-                ? "border-red-500 ring-2 ring-red-500 bg-red-50"
-                : "border-border"
+                  ? "border-error ring-2 ring-error bg-error/10"
+                  : "border-input-border"
             }`}
           disabled={verified}
         />

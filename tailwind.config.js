@@ -668,13 +668,6 @@ const config = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-
-  // ================================
-  // EXPERIMENTAL FEATURES
-  // ================================
-  // experimental: {
-  //   optimizeUniversalDefaults: true,
-  // },
 };
 
 export default config;

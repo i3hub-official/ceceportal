@@ -24,7 +24,7 @@
 
   /* Layout Dimensions */
   --nav-height: 73px;
-  --header-height: 64px;
+  --header-height: 73px;
   --sidebar-width: 256px;
   --container-max-width: 1200px;
 
@@ -697,3 +697,77 @@
     @apply block;
   }
 }
+
+/* THEME SMOOTH TRANSITION*/
+/* Smooth theme transitions */
+html {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Apply transitions to all elements that use theme variables */
+[data-theme-transition] {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Specific transitions for common interactive elements */
+.btn,
+.card,
+.form-input,
+.form-select,
+.badge,
+.alert {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add to your I3CSS file after the existing styles */
+
+/* Apply theme transitions to all I3CSS components */
+.card,
+.btn,
+.btn-sm,
+.btn-md,
+.btn-lg,
+.form-input,
+.form-select,
+.form-textarea,
+.badge,
+.alert,
+.nav,
+.table th,
+.table td {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Special handling for elements with opacity variants */
+.btn-primary,
+.btn-secondary,
+.btn-accent,
+.btn-success,
+.btn-warning,
+.btn-error,
+.btn-outline,
+.btn-ghost {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* END OF THEMES */

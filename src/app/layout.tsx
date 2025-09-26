@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import AppHeader from "@/components/glob/AppHeader"; // Import your header component
 import { HeaderProvider } from "@/contexts/HeaderContext";
+import Footer from "@/components/glob/Footer";
 
 export const metadata: Metadata = {
   title: "CEC Portal - eRegistration",
@@ -48,7 +49,7 @@ export default function RootLayout({
             {/* Use the actual nav height value from CSS */}
             {children}
           </main>
-          {/* <Footer /> */}
+          <Footer />
         </HeaderProvider>
       </body>
     </html>

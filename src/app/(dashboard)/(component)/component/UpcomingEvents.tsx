@@ -14,9 +14,9 @@ const mockEvents = [
 
 export default function UpcomingEvents() {
   return (
-    <div className="bg-card rounded-xl p-6 shadow-sm">
+    <div className="card">
       <div className="flex items-center gap-2 mb-5">
-        <div className="p-2 bg-primary/10 rounded-lg">
+        <div className="p-2 bg-primary-10 rounded-lg">
           <Calendar className="w-5 h-5 text-primary" />
         </div>
         <div>
@@ -33,7 +33,7 @@ export default function UpcomingEvents() {
         {mockEvents.map((event, i) => (
           <li
             key={i}
-            className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/40 transition-colors"
+            className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20 transition-colors"
           >
             <div className="text-sm font-medium text-primary min-w-[80px]">
               {new Date(event.date).toLocaleDateString("en-GB", {
@@ -41,7 +41,7 @@ export default function UpcomingEvents() {
                 month: "short",
               })}
             </div>
-            <hr className="border-l border-muted h-6" />
+            <hr className="border-l border-border h-6" />
             <span className="text-sm text-foreground">{event.title}</span>
           </li>
         ))}

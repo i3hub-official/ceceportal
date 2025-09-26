@@ -67,9 +67,9 @@ export default function RecentActivity() {
   ];
 
   return (
-    <div className="rounded-xl p-6 shadow-sm bg-card ">
+    <div className="card">
       <div className="flex items-center gap-2">
-        <div className="p-2 bg-primary/10 rounded-lg">
+        <div className="p-2 bg-primary-10 rounded-lg">
           <UserPlus className="w-5 h-5 text-primary" />
         </div>
         <div>
@@ -86,7 +86,7 @@ export default function RecentActivity() {
         {registrations.map((registration) => (
           <div
             key={registration.id}
-            className="flex items-start space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-150"
+            className="flex items-start space-x-3 p-3 rounded-lg hover:bg-muted-10 dark:hover:bg-muted-20 transition-colors duration-150"
           >
             <div className="flex-shrink-0 relative">
               <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-border">
@@ -101,8 +101,8 @@ export default function RecentActivity() {
               <div
                 className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center ${
                   registration.status === "Completed"
-                    ? "bg-green-500"
-                    : "bg-amber-500"
+                    ? "bg-success"
+                    : "bg-warning"
                 }`}
               >
                 {registration.status === "Completed" ? (
@@ -141,8 +141,8 @@ export default function RecentActivity() {
                 <span
                   className={`text-xs px-2 py-1 rounded-full ${
                     registration.status === "Completed"
-                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                      : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                      ? "bg-success-10 text-success dark:bg-success-20 dark:text-success-80"
+                      : "bg-warning-10 text-warning dark:bg-warning-20 dark:text-warning-80"
                   }`}
                 >
                   {registration.status}

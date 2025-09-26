@@ -33,42 +33,42 @@ export default function NotificationContainer() {
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className={`relative bg-card rounded-lg shadow-lg border-l-4 p-3 transition-all duration-300 ease-in-out transform animate-in slide-in-from-right-5 border border-border ${
+          className={`relative card border-l-4 p-3 transition-all duration-300 ease-in-out transform animate-in slide-in-from-right-5 ${
             notification.type === "success"
-              ? "border-l-emerald-500"
+              ? "border-l-success"
               : notification.type === "error"
-                ? "border-l-red-500"
+                ? "border-l-error"
                 : notification.type === "warning"
-                  ? "border-l-amber-500"
-                  : "border-l-blue-500"
+                  ? "border-l-warning"
+                  : "border-l-info"
           }`}
         >
           <div className="flex items-start">
             <div className="flex-shrink-0">
               {notification.type === "success" && (
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               )}
               {notification.type === "error" && (
-                <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                <XCircle className="h-4 w-4 text-error" />
               )}
               {notification.type === "warning" && (
-                <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
               )}
               {notification.type === "info" && (
-                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <Info className="h-4 w-4 text-info" />
               )}
             </div>
             <div className="ml-2 flex-1 min-w-0">
               <h4 className="text-sm font-medium text-foreground truncate">
                 {notification.title}
               </h4>
-              <p className="mt-1 text-xs text-foreground/70 line-clamp-2">
+              <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
                 {notification.message}
               </p>
             </div>
             <button
               onClick={() => removeNotification(notification.id)}
-              className="ml-2 inline-flex text-foreground/50 hover:text-foreground/70 transition-colors p-1"
+              className="ml-2 inline-flex text-muted-foreground hover:text-foreground transition-colors p-1"
             >
               <XCircle className="h-3 w-3" />
             </button>

@@ -30,16 +30,16 @@ const Sidebar: React.FC = () => {
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0 bg-card/80 backdrop-blur-md border-border lg:bg-card lg:backdrop-blur-0 overflow-y-auto`}
+      ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      lg:translate-x-0 bg-card/80 backdrop-blur-md border-border lg:bg-card lg:backdrop-blur-0 overflow-y-auto`}
     >
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between h-16 px-6 border-border">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-border">
           <h2 className="text-xl font-bold text-primary">CEC ePortal</h2>
           <button
             onClick={toggleSidebar}
-            className="lg:hidden p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="lg:hidden p-1 rounded-md hover:bg-muted-10 dark:hover:bg-muted-20"
           >
             <X size={20} />
           </button>
@@ -53,10 +53,10 @@ const Sidebar: React.FC = () => {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-border">
+        <div className="p-4 border-t border-border">
           <button
             onClick={() => setActiveMenu("school-profile")}
-            className="w-full flex items-center space-x-3 p-3 rounded-lg bg-background/80 backdrop-blur-sm lg:bg-background hover:bg-background dark:hover:bg-background transition-colors duration-200 cursor-pointer"
+            className="w-full flex items-center space-x-3 p-3 rounded-lg bg-background/80 backdrop-blur-sm lg:bg-background hover:bg-muted-10 dark:hover:bg-muted-20 transition-colors duration-200 cursor-pointer"
           >
             <div className="w-8 h-8 rounded-full flex items-center justify-center bg-primary">
               <User size={16} className="text-white" />
@@ -65,7 +65,7 @@ const Sidebar: React.FC = () => {
               <p className="text-sm font-medium truncate text-foreground">
                 Admin User
               </p>
-              <p className="text-xs truncate text-foreground opacity-60">
+              <p className="text-xs truncate text-muted-foreground">
                 admin@school.edu
               </p>
             </div>
