@@ -5,7 +5,6 @@ import {
   Line,
   XAxis,
   YAxis,
-  Tooltip,
   ResponsiveContainer,
   CartesianGrid,
   Area,
@@ -14,12 +13,8 @@ import {
   PieChart,
   Pie,
   Cell,
-  TooltipProps,
 } from "recharts";
-import {
-  TrendingUp,
-  Download,
-} from "lucide-react";
+import { TrendingUp, Download } from "lucide-react";
 
 const mockData = [
   { day: "Mon", registrations: 40, completed: 35, pending: 5 },
@@ -47,37 +42,6 @@ const statusData = [
 export default function TrendsInsights() {
   const [timeRange, setTimeRange] = useState("week");
   const [activeTab, setActiveTab] = useState("registrations");
-
-  type RegistrationData = (typeof mockData)[number];
-  const CustomTooltip = (props: TooltipProps) => {
-    const { active, payload } = props as TooltipProps & {
-      payload: { payload: RegistrationData }[];
-    };
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-card border border-border rounded-lg p-3 shadow-md">
-          <p className="font-medium text-foreground">
-            {payload[0].payload.day}
-          </p>
-          <p className="text-sm text-primary">
-            Registrations:{" "}
-            <span className="font-bold">
-              {payload[0].payload.registrations}
-            </span>
-          </p>
-          <p className="text-sm text-green-500">
-            Completed:{" "}
-            <span className="font-bold">{payload[0].payload.completed}</span>
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Pending:{" "}
-            <span className="font-bold">{payload[0].payload.pending}</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <div className="bg-card rounded-xl p-6 shadow-sm mt-8 mb-8">
@@ -213,7 +177,6 @@ export default function TrendsInsights() {
                   stroke="currentColor"
                   tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 />
-                <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
                   dataKey="registrations"
@@ -253,7 +216,6 @@ export default function TrendsInsights() {
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -321,13 +283,6 @@ export default function TrendsInsights() {
               <YAxis
                 stroke="currentColor"
                 tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  borderRadius: "0.5rem",
-                  border: "1px solid hsl(var(--border))",
-                }}
               />
               <Bar
                 dataKey="score"
