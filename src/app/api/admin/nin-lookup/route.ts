@@ -27,7 +27,6 @@ const AUDIT_ACTIONS = {
   SECURITY_ALERT: "SECURITY_ALERT",
 } as const;
 
-
 // Rate limiting middleware
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
   const now = Date.now();
@@ -69,15 +68,28 @@ async function createAuditLog(
   schoolId?: string
 ) {
   try {
+    // If no adminUserId is provided, use the system user
+    if (!adminUserId) {
+      const systemUser = await prisma.adminUser.findUnique({
+        where: { email: process.env.SA_EMAIL || "system@example.com" },
+      });
+
+      if (!systemUser) {
+        console.error("System user not found. Cannot create audit log.");
+        return;
+      }
+
+      adminUserId = systemUser.id;
+    }
+
     await prisma.adminAuditLog.create({
       data: {
-        adminUserId: adminUserId || "system",
+        adminUserId,
         action,
-        details: JSON.parse(JSON.stringify(details)),
+        details, // Prisma will handle JSON serialization automatically
         ipAddress,
         userAgent,
-        // Removed school property as it is not assignable
-        ...(schoolId && {}),
+        ...(schoolId && { schoolId }),
       },
     });
   } catch (error) {
@@ -175,8 +187,6 @@ export async function POST(request: NextRequest) {
     }
 
     const { nin } = validationResult.data;
-
-    console.log("🔍 NIN lookup request:", { ninLength: nin.length });
 
     // Create initial audit log
     await createAuditLog(
@@ -347,7 +357,7 @@ export async function POST(request: NextRequest) {
             role: adminUser.role,
             allSchoolsVerified,
             activityStats: {
-             auditLogs: adminUser._count?.auditLogs ?? 0,
+              auditLogs: adminUser._count?.auditLogs ?? 0,
               candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
             },
           },
@@ -406,8 +416,8 @@ export async function POST(request: NextRequest) {
         role: adminUser.role,
         allSchoolsVerified,
         activityStats: {
-         auditLogs: adminUser._count?.auditLogs ?? 0,
-              candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
+          auditLogs: adminUser._count?.auditLogs ?? 0,
+          candidatesCreated: adminUser._count?.candidatesCreated ?? 0,
         },
         readonly: true, // Flag to indicate that admin info should be readonly
       },

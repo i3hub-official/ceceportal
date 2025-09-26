@@ -334,79 +334,84 @@ export async function POST(request: NextRequest) {
       adminId: string;
     }
 
-    const result = await prisma.$transaction(async (tx) => {
-      let finalAdminUser: AdminUser;
+    const result = await prisma.$transaction(
+      async (tx) => {
+        let finalAdminUser: AdminUser;
 
-      if (isNewAdmin) {
-        finalAdminUser = await tx.adminUser.create({
+        if (isNewAdmin) {
+          finalAdminUser = await tx.adminUser.create({
+            data: {
+              name: protectedAdminName!.encrypted,
+              email: protectedAdminEmail.encrypted,
+              emailHash: protectedAdminEmail.searchHash ?? "",
+              phone: protectedAdminPhone.encrypted,
+              phoneHash: protectedAdminPhone.searchHash ?? "",
+              password: protectedAdminPassword.encrypted,
+              nin: protectedNin.encrypted,
+              ninHash: protectedNin.searchHash ?? "",
+              role: "Admin",
+              isActive: true,
+              emailVerified: false,
+            },
+          });
+        } else {
+          finalAdminUser = await tx.adminUser.update({
+            where: { id: adminUser!.id },
+            data: {
+              password: protectedAdminPassword.encrypted,
+            },
+          });
+        }
+
+        const school = await tx.school.create({
           data: {
-            name: protectedAdminName!.encrypted,
-            email: protectedAdminEmail.encrypted,
-            emailHash: protectedAdminEmail.searchHash ?? "",
-            phone: protectedAdminPhone.encrypted,
-            phoneHash: protectedAdminPhone.searchHash ?? "",
-            password: protectedAdminPassword.encrypted,
-            nin: protectedNin.encrypted,
-            ninHash: protectedNin.searchHash ?? "",
-            role: "Admin",
-            isActive: true,
+            centerNumber: body.centerNumber,
+            centerName: body.centerName,
+            state: body.state,
+            lga: body.lga,
+            schoolEmail: protectedSchoolEmail.encrypted,
+            schoolEmailHash: protectedSchoolEmail.searchHash ?? "",
+            schoolPhone: protectedSchoolPhone.encrypted,
+            schoolPhoneHash: protectedSchoolPhone.searchHash ?? "",
+            schoolAddress: protectedSchoolAddress.encrypted,
+            schoolType: body.schoolType,
+            principalName: protectedPrincipalName.encrypted,
+            principalPhone: protectedPrincipalPhone.encrypted,
+            principalPhoneHash: protectedPrincipalPhone.searchHash ?? "",
+            examOfficerPhone: protectedExamOfficerPhone?.encrypted || null,
+            examOfficerPhoneHash: protectedExamOfficerPhone?.searchHash || null,
+            isVerified: false,
             emailVerified: false,
+            adminId: finalAdminUser.id,
           },
         });
-      } else {
-        finalAdminUser = await tx.adminUser.update({
-          where: { id: adminUser!.id },
+
+        const auditDetails = {
+          schoolId: school.id,
+          schoolName: school.centerName,
+          centerNumber: school.centerNumber,
+          registrationDate: new Date().toISOString(),
+          isNewAdmin: isNewAdmin,
+          adminVerified: !isNewAdmin,
+        };
+
+        await tx.adminAuditLog.create({
           data: {
-            password: protectedAdminPassword.encrypted,
+            adminUserId: finalAdminUser.id,
+            action: "SCHOOL_REGISTRATION",
+            details: auditDetails,
+            ipAddress: request.headers.get("x-forwarded-for") || "unknown",
+            userAgent: request.headers.get("user-agent") || "unknown",
           },
         });
+
+        return { school, adminUser: finalAdminUser };
+      },
+      {
+        maxWait: 5000, // wait up to 5s for a free connection
+        timeout: 20000, // allow this transaction up to 20s to finish
       }
-
-      const school = await tx.school.create({
-        data: {
-          centerNumber: body.centerNumber,
-          centerName: body.centerName,
-          state: body.state,
-          lga: body.lga,
-          schoolEmail: protectedSchoolEmail.encrypted,
-          schoolEmailHash: protectedSchoolEmail.searchHash ?? "",
-          schoolPhone: protectedSchoolPhone.encrypted,
-          schoolPhoneHash: protectedSchoolPhone.searchHash ?? "",
-          schoolAddress: protectedSchoolAddress.encrypted,
-          schoolType: body.schoolType,
-          principalName: protectedPrincipalName.encrypted,
-          principalPhone: protectedPrincipalPhone.encrypted,
-          principalPhoneHash: protectedPrincipalPhone.searchHash ?? "",
-          examOfficerPhone: protectedExamOfficerPhone?.encrypted || null,
-          examOfficerPhoneHash: protectedExamOfficerPhone?.searchHash || null,
-          isVerified: false,
-          emailVerified: false,
-          adminId: finalAdminUser.id,
-        },
-      });
-
-      // Create audit log details as plain object
-      const auditDetails = {
-        schoolId: school.id,
-        schoolName: school.centerName,
-        centerNumber: school.centerNumber,
-        registrationDate: new Date().toISOString(),
-        isNewAdmin: isNewAdmin,
-        adminVerified: !isNewAdmin,
-      };
-
-      await tx.adminAuditLog.create({
-        data: {
-          adminUserId: finalAdminUser.id,
-          action: "SCHOOL_REGISTRATION",
-          details: auditDetails,
-          ipAddress: request.headers.get("x-forwarded-for") || "unknown",
-          userAgent: request.headers.get("user-agent") || "unknown",
-        },
-      });
-
-      return { school, adminUser: finalAdminUser };
-    });
+    );
 
     console.log("✅ Database transaction completed successfully");
 

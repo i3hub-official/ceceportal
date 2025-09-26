@@ -461,6 +461,8 @@ export default function SchoolRegistrationPage() {
                   name="centerNumber"
                   value={formData.centerNumber}
                   onChange={handleInputChange}
+                  maxLength={7}
+                  minLength={7}
                   disabled={isVerifying}
                   className={`form-input ${errors.centerNumber ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   placeholder="Enter your center number"
@@ -731,8 +733,10 @@ export default function SchoolRegistrationPage() {
                   <label className="block text-sm font-medium text-green-900 dark:text-green-100 mb-2">
                     National Identification Number (NIN) *
                   </label>
-                  <div className="flex gap-2">
-                    <div className="flex-1 input-group">
+
+                  {/* column stack: input first, button beneath and centered */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-full input-group relative">
                       <CreditCard className="input-icon-left text-green-600" />
                       <input
                         type="text"
@@ -740,10 +744,14 @@ export default function SchoolRegistrationPage() {
                         value={formData.adminNin}
                         onChange={handleInputChange}
                         maxLength={11}
-                        className="form-input"
-                        placeholder="Enter 11-digit NIN"
+                        minLength={11}
+                        className="form-input pl-10 w-full"
+                        placeholder="Enter NIN to begin verification"
+                        aria-label="National Identification Number"
                       />
                     </div>
+
+                    {/* centered button; full width on tiny screens, auto width on sm+ */}
                     <button
                       type="button"
                       onClick={lookupNin}
@@ -752,11 +760,16 @@ export default function SchoolRegistrationPage() {
                         !formData.adminNin ||
                         formData.adminNin.length !== 11
                       }
-                      className="btn btn-primary"
+                      className="btn btn-primary w-full sm:w-auto"
+                      aria-disabled={
+                        isVerifyingNin ||
+                        !formData.adminNin ||
+                        formData.adminNin.length !== 11
+                      }
                     >
                       {isVerifyingNin ? (
                         <>
-                          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                          <Loader2 className="w-4 h-4 mr-1 animate-spin inline-block" />
                           Verifying...
                         </>
                       ) : (
@@ -1080,7 +1093,7 @@ export default function SchoolRegistrationPage() {
                 onClick={() => setStep(2)}
                 className="btn btn-outline"
               >
-                Back to School Info
+                Back to Center Lookup
               </button>
               <button
                 type="submit"
