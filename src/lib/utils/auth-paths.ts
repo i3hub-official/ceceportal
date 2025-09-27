@@ -9,8 +9,8 @@ export const PUBLIC_PATHS = [
 ] as const;
 
 export const PRIVATE_PATHS = [
-  "/admin",
-  "/admin/*",
+  // "/admin",
+  // "/admin/*",
   "/settings",
   "/settings/*",
   "/profile",
@@ -24,6 +24,10 @@ export const AUTH_PATHS = [
   "/reset-password",
   "/verify-email",
   "/resend-verification",
+  "api/v1",
+  "api/v1/*",
+  "api/v2",
+  "api/v2/*",
 ] as const;
 
 // Type exports
