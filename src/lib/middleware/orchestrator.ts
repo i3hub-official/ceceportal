@@ -7,9 +7,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ContextBuilder } from "./contextBuilder";
 import { SecurityGuard } from "./securityGuard";
-import { RateEnforcer } from "./rateEnforcer";
+import { EnhancedRateEnforcer } from "./enhancedRateEnforcer"; // Updated import
 import { ActivityLogger } from "./activityLogger";
 import { AccessController } from "./accessController";
+import { ApiAccessGuardian } from "./apiAccessGuardian"; // New import
 import { ResponseMerger } from "./responseMerger";
 import type { MiddlewareContext } from "./types";
 
@@ -28,8 +29,20 @@ export class Orchestrator {
       if (securityResponse.status !== 200) return securityResponse;
       response = ResponseMerger.merge(response, securityResponse);
 
-      // TASK 3: Enforce rate limits (traffic control)
-      const rateLimitResponse = await RateEnforcer.enforce(request, context);
+      // TASK 8: API Access Guardian (NEW - JWT validation for API paths)
+      if (ApiAccessGuardian.isApiPath(request.nextUrl.pathname)) {
+        const apiResponse = await ApiAccessGuardian.guard(request, context);
+        if (apiResponse.status !== 200) {
+          return ResponseMerger.merge(apiResponse, response);
+        }
+        response = ResponseMerger.merge(response, apiResponse);
+      }
+
+      // TASK 3: Enhanced rate limiting (updated for API clients)
+      const rateLimitResponse = await EnhancedRateEnforcer.enforce(
+        request,
+        context
+      );
       if (rateLimitResponse.status === 429) {
         return ResponseMerger.merge(rateLimitResponse, response);
       }
@@ -38,12 +51,14 @@ export class Orchestrator {
       // TASK 4: Log activity (observation)
       await ActivityLogger.log(request, context);
 
-      // TASK 5: Control access (authorization)
-      const accessResponse = AccessController.control(request, context);
-      if (accessResponse.redirected || accessResponse.status !== 200) {
-        return ResponseMerger.merge(accessResponse, response);
+      // TASK 5: Control access (only for non-API paths)
+      if (!ApiAccessGuardian.isApiPath(request.nextUrl.pathname)) {
+        const accessResponse = AccessController.control(request, context);
+        if (accessResponse.redirected || accessResponse.status !== 200) {
+          return ResponseMerger.merge(accessResponse, response);
+        }
+        response = ResponseMerger.merge(response, accessResponse);
       }
-      response = ResponseMerger.merge(response, accessResponse);
 
       // TASK 6: Add system headers and finalize
       const processingTime = Date.now() - startTime;
@@ -56,7 +71,6 @@ export class Orchestrator {
     } catch (error) {
       console.error("[ORCHESTRATOR] ❌ Error in middleware chain:", error);
 
-      // Create error response but preserve any security headers
       const errorResponse = new Response("Internal Server Error", {
         status: 500,
         headers: { "Access-Control-Allow-Origin": "*" },

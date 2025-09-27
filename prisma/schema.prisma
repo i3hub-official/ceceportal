@@ -77,6 +77,7 @@ model School {
   examSessions ExamSession[]
   auditLogs    AdminAuditLog[]
   AdminUser    AdminUser[]
+  apiClients   ApiClient[] // New relation
 
   @@map("schools")
 }
@@ -110,14 +111,76 @@ model AdminUser {
   schoolId String?
   school   School? @relation(fields: [schoolId], references: [id])
 
+  //API Associations
+
   // Relationships
   schools           School[]            @relation("SchoolAdmins") // ✅ matches School
   sessions          Session[]
   candidatesCreated Candidate[]         @relation("CandidateCreatedBy")
   auditLogs         AdminAuditLog[]
   EmailVerification EmailVerification[]
+  apiClientsCreated ApiClient[] // New relation
 
   @@map("admin_users")
+}
+
+// API Clients for programmatic access
+model ApiClient {
+  id          String  @id @default(cuid())
+  name        String // Client application name
+  description String? // Optional description
+  accessCode  String  @unique // Public access code for API identification
+  secretKey   String // Secret key for JWT signing (hashed)
+
+  // Client configuration
+  isActive   Boolean  @default(true)
+  rateLimit  Int      @default(1000) // Requests per hour
+  allowedIps String[] // Empty array = allow all IPs
+
+  // Permissions & Scopes
+  scopes String[] // e.g., ["read:students", "write:grades", "admin:reports"]
+
+  // Metadata
+  createdBy  String // Admin user who created this client
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  lastUsedAt DateTime?
+
+  // Relations
+  schoolId  String?
+  school    School?   @relation(fields: [schoolId], references: [id])
+  adminUser AdminUser @relation(fields: [createdBy], references: [id])
+
+  // Usage tracking
+  apiUsageLogs ApiUsageLog[]
+
+  @@map("api_clients")
+}
+
+model ApiUsageLog {
+  id String @id @default(cuid())
+
+  // Client info
+  clientId String
+  client   ApiClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  // Request info
+  endpoint  String // API endpoint called
+  method    String // HTTP method
+  ipAddress String
+  userAgent String?
+
+  // Response info
+  statusCode   Int
+  responseTime Int // Response time in milliseconds
+
+  // Metadata
+  timestamp DateTime @default(now())
+  requestId String? // For tracing
+
+  @@index([clientId, timestamp])
+  @@index([endpoint, timestamp])
+  @@map("api_usage_logs")
 }
 
 // User Sessions for authentication
