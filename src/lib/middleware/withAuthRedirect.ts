@@ -1,3 +1,4 @@
+// fILE: src/lib/middleware/withAuthRedirect.ts
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthPath } from "@/lib/utils/auth-paths";
 

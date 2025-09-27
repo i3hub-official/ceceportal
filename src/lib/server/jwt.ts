@@ -1,5 +1,4 @@
 // src/lib/server/jwt.ts
-// NO "use client" or "use server" directive needed for utilities
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 
 export interface TokenPayload extends JWTPayload {

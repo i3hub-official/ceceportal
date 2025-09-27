@@ -1,3 +1,4 @@
+// File: src/lib/middleware/withCors.ts
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
