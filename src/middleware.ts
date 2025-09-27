@@ -6,6 +6,7 @@
 
 // File: src/middleware.ts
 import { NextRequest } from "next/server";
+import "./registry";
 import { Orchestrator } from "@/lib/middleware/orchestrator";
 
 // Matcher Config - Define what gets processed

@@ -9,7 +9,7 @@ import type { MiddlewareContext } from "@/lib/middleware/types";
 
 export class AccessController {
   private static readonly SESSION_COOKIE = "session-token";
-  private static readonly AGENT_COOKIE = "agent-id";
+  private static readonly AGENT_COOKIE = "adminId";
   private static readonly SESSION_EXPIRY_HOURS = 6;
 
   static control(

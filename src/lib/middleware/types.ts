@@ -11,6 +11,7 @@ export interface MiddlewareContext {
   isPrivatePath: boolean;
   hasSession: boolean;
   sessionToken?: string;
+  refreshToken?: string;
   agentId?: string;
   clientIp: string;
   userAgent: string;

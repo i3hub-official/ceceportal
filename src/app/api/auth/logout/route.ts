@@ -110,9 +110,9 @@ export async function POST(request: NextRequest) {
       ...cookieOptions,
     });
 
-    // Also clear the public agent-id cookie if it exists
+    // Also clear the public adminId cookie if it exists
     cookieStore.set({
-      name: "agent-id",
+      name: "adminId",
       value: "",
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
       });
 
       cookieStore.set({
-        name: "agent-id",
+        name: "adminId",
         value: "",
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",

@@ -17,7 +17,8 @@ export class ContextBuilder {
   static build(request: NextRequest): MiddlewareContext {
     const pathname = request.nextUrl.pathname;
     const sessionToken = request.cookies.get("session-token")?.value;
-    const agentId = request.cookies.get("agent-id")?.value;
+    const refreshToken = request.cookies.get("refresh-token")?.value; // Add this
+    const agentId = request.cookies.get("adminId")?.value;
 
     return {
       isPublicPath: isPublicPath(pathname),
@@ -25,6 +26,7 @@ export class ContextBuilder {
       isPrivatePath: isPrivatePath(pathname),
       hasSession: !!sessionToken,
       sessionToken,
+      refreshToken, // Add this
       agentId,
       clientIp: getClientIp(request) || "unknown",
       userAgent: request.headers.get("user-agent") || "unknown",
