@@ -154,6 +154,15 @@ model ApiClient {
   // Usage tracking
   apiUsageLogs ApiUsageLog[]
 
+  @@index([isActive, createdAt])
+  @@index([schoolId, createdAt])
+  @@index([createdBy, createdAt])
+  @@index([accessCode])
+  @@index([scopes], type: Gin)
+  @@index([rateLimit])
+  @@index([lastUsedAt])
+  @@index([createdAt])
+  @@index([updatedAt])
   @@map("api_clients")
 }
 
