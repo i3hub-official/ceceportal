@@ -271,7 +271,7 @@ export class RequestTransformer {
     }
 
     // Admin paths get enhanced transformation
-    if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
+    if (pathname.startsWith("/admin") || pathname.startsWith("/admin")) {
       return {
         ...this.DEFAULT_CONFIG,
         sanitizeQueryParams: true,

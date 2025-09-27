@@ -1029,7 +1029,7 @@ export default function CandidateRegistrationPage() {
 
               <button
                 type="button"
-                onClick={() => router.push("/dashboard")}
+                onClick={() => router.push("/admin")}
                 className="btn btn-outline w-full"
               >
                 Go to Dashboard
@@ -1051,7 +1051,7 @@ export default function CandidateRegistrationPage() {
           <div className="mb-6">
             <button
               type="button"
-              onClick={() => router.push("/dashboard")}
+              onClick={() => router.push("/admin")}
               className="inline-flex items-center gap-2 text-primary hover:underline mb-4 text-sm"
             >
               <ArrowLeft className="w-4 h-4" />

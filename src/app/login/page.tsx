@@ -93,7 +93,7 @@ export default function LoginPage() {
 
           // Successful login - redirect to dashboard
           notifySuccess("Login successful!");
-          router.push("/dashboard");
+          router.push("/admin");
         } else {
           // Login failed
           setLoginError(

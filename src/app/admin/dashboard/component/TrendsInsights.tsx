@@ -1,4 +1,4 @@
-// components/dashboard/TrendsInsights.tsx
+// components/admin/TrendsInsights.tsx
 import { useState } from "react";
 import {
   LineChart,

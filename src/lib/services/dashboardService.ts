@@ -1,4 +1,4 @@
-// app/dashboard/services/dashboardService.ts
+// app/admin/services/adminService.ts
 
 export interface Candidate {
   id: number;

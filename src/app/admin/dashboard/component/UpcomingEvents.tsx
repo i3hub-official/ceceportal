@@ -1,4 +1,4 @@
-// components/dashboard/UpcomingEvents.tsx
+// components/admin/UpcomingEvents.tsx
 import { Calendar } from "lucide-react";
 
 const mockEvents = [

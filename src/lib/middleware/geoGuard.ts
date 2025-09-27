@@ -166,7 +166,7 @@ export class GeoGuard {
     }
 
     // Admin paths get moderate restrictions
-    if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
+    if (pathname.startsWith("/admin") || pathname.startsWith("/admin")) {
       return {
         ...this.DEFAULT_RESTRICTIONS,
         allowVPN: false, // No VPNs for admin access
